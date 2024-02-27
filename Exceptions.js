@@ -54,32 +54,32 @@ class AbstractClassException extends BaseException {
 
 //Excepción name, obligatorio
 class NameException extends BaseException {
-  constructor(fileName, lineNumber) {
-    super("El nombre de ${className} es obligatorio.", fileName, lineNumber);
+  constructor(className, fileName, lineNumber) {
+    super(`Error: El ${className} es obligatorio.`, fileName, lineNumber);
     this.name = "NameException ";
   }
 }
 
 //Excepción coordenadas
-class CoordinateLatitudeException extends BaseException {
-  constructor(fileName, lineNumber) {
+class LatitudeException extends BaseException {
+  constructor(className, fileName, lineNumber) {
     super(
-      "La latitud de la ubicación de ${className} es obligatorio.",
+      `La latitud de la ubicación de ${className} es obligatorio.`,
       fileName,
       lineNumber
     );
-    this.name = "coordinateLatitudeException ";
+    this.name = "LatitudeException ";
   }
 }
 
-class CoordinateLongitudeException extends BaseException {
-  constructor(fileName, lineNumber) {
+class LongitudeException extends BaseException {
+  constructor(className, fileName, lineNumber) {
     super(
-      "El longitud de la ubicación de ${className} es obligatorio.",
+      `El longitud de la ubicación de ${className} es obligatorio.`,
       fileName,
       lineNumber
     );
-    this.name = "coordinateLongitudeException ";
+    this.name = "LongitudeException ";
   }
 }
 
@@ -90,6 +90,6 @@ export {
   InvalidValueException,
   AbstractClassException,
   NameException,
-  CoordinateLatitudeException,
-  CoordinateLongitudeException,
+  LatitudeException,
+  LongitudeException,
 };

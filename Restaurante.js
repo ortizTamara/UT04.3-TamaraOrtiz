@@ -131,3 +131,5 @@ class Coordinate {
     return `${this.#latitude} ${this.#longitude}`;
   }
 }
+
+export { Menu, Restaurant, Coordinate };

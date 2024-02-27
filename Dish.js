@@ -72,3 +72,5 @@ class Dish {
     }`;
   }
 }
+
+export { Dish };

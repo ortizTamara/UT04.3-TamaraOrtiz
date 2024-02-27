@@ -45,3 +45,5 @@ class Allergen {
     return `${this.#name} ${this.#description}`;
   }
 }
+
+export { Allergen };

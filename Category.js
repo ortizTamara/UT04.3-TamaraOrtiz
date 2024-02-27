@@ -47,3 +47,5 @@ class Category {
     return `${this.#name} ${this.#description}`;
   }
 }
+
+export { Category };
