@@ -11,6 +11,7 @@ import {
 
 import { Dish } from "./dish.js";
 import { Category } from "./Category.js";
+import { Allergen } from "./allergen.js";
 
 //TESTEO DISH
 function testeoDish() {
@@ -57,7 +58,7 @@ function testeoDish() {
       "La mejor carbonara de Italia"[
         ("espaguetis", "beicon", "Yema de huevo", "Queso")
       ],
-      "pizza2.jpg"
+      "espaguetis1.jpg"
     );
 
     console.log("Test 6:");
@@ -82,11 +83,33 @@ function testeoCategory() {
     const category2 = new Category(null, "Categoría de pizzas");
     console.log("Test 2:");
     console.log("Esperado: Error, hay una excepción");
-    console.log("Resultado:", category1.name);
+    console.log("Resultado:", category2.name);
   } catch (error) {
     console.error(error);
   }
 }
 
+function testeoAllergen() {
+  const allergen1 = new Allergen("Gluten", "Contiene gluten");
+
+  console.log("");
+  console.log("---------- TESTEO ALLERGEN ----------");
+  console.log("Test 1:");
+  console.log("Esperado: Gluten");
+  console.log("Resultado:", allergen1.name);
+  console.log("Descripción:", allergen1.description);
+
+  //   DUDA PORQUE AQUÍ EN CONSOLA NO ME SALE EN ROJO
+  try {
+    const allergen2 = new Allergen(null, "Contiene gluten");
+    console.log("Test 2:");
+    console.log("Esperado: Error, hay una excepción");
+    console.log("Resultado:", allergen2.name);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 testeoDish();
 testeoCategory();
+testeoAllergen();
