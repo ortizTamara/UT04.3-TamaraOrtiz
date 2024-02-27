@@ -42,7 +42,7 @@ class Menu {
   }
 
   toString() {
-    return `${this.#name} ${this.#description}`;
+    return `${this.#name} - ${this.#description}`;
   }
 }
 
@@ -90,7 +90,7 @@ class Restaurant {
     });
   }
   toString() {
-    return `${this.#name} ${this.#description} ${this.#location}`;
+    return `${this.#name} - ${this.#description} - ${this.#location}`;
   }
 }
 

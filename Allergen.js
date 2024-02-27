@@ -42,7 +42,7 @@ class Allergen {
   }
 
   toString() {
-    return `${this.#name} ${this.#description}`;
+    return `${this.#name} - ${this.#description}`;
   }
 }
 

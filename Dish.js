@@ -67,7 +67,7 @@ class Dish {
   }
 
   toString() {
-    return `${this.#name} ${this.#description} ${this.#ingredients} ${
+    return `${this.#name} - ${this.#description} - ${this.#ingredients} - ${
       this.#image
     }`;
   }

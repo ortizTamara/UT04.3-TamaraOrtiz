@@ -10,11 +10,13 @@ import {
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
-import { Category } from "./Category.js";
+import { Category } from "./category.js";
 import { Allergen } from "./allergen.js";
+import { Menu, Restaurant, Coordinate } from "./Restaurante.js"; //Aquí me da un problema si el archivo lo pongo con r minuscula
 
 //TESTEO DISH
 function testeoDish() {
+  console.log("---------- TESTEO DISH ----------");
   // Dish correcto
   const dish1 = new Dish(
     "Pizza",
@@ -23,35 +25,34 @@ function testeoDish() {
     "pizza1.jpg"
   );
 
-  // Prueba 1: Aseguramos que el nombre sea correcto
-  console.log("---------- TESTEO DISH ----------");
-  console.log("Test 1:");
+  // Prueba 1: Mostramos el nombre
+  console.log("Test 1: Nombre");
   console.log("Esperado: Pizza");
   console.log("Resultado:", dish1.name);
 
-  // Prueba 2: Aseguramos que la descripción sea correcta
-  console.log("Test 2:");
+  // Prueba 2: Mostramos la descripción
+  console.log("Test 2: Descripción");
   console.log("Esperado: La mejor pizza del mundo");
   console.log("Resultado:", dish1.description);
 
-  // Prueba 3: Aseguramos que los ingredientes sean correctos
-  console.log("Test 3:");
+  // Prueba 3: Mostramos los ingredientes
+  console.log("Test 3: Ingredientes");
   console.log("Esperado: ['Tomate', 'Queso', 'Peperoni', 'Oregano']");
   console.log("Resultado:", dish1.ingredients);
 
-  // Prueba 4: Aseguramos que la imagen sea correcta
-  console.log("Test 4:");
+  // Prueba 4: Mostramos la "imagen"
+  console.log("Test 4: Imagen");
   console.log("Esperado: pizza1.jpg");
   console.log("Resultado:", dish1.image);
 
-  // Prueba 5: Aseguramos que toString devuelve el formato esperado
-  console.log("Test 5:");
+  // Prueba 5: Mostramos el toString
+  console.log("Test 5: ToString");
   console.log(
-    "Esperado: Pizza La mejor pizza del mundo Tomate,Queso,Peperoni,Oregano pizza1.jpg"
+    "Esperado: Pizza - La mejor pizza del mundo - Tomate,Queso,Peperoni,Oregano - pizza1.jpg"
   );
   console.log("Resultado:", dish1.toString());
 
-  //Con error en name
+  //Error: Name es Null
   try {
     const dish2 = new Dish(
       null,
@@ -61,7 +62,8 @@ function testeoDish() {
       "espaguetis1.jpg"
     );
 
-    console.log("Test 6:");
+    // Prueba 6: Mostramos la excepción
+    console.log("Test 6: Nombre null");
     console.log("Esperado: Error, hay una excepción");
     console.log("Resultado:", dish2.name);
   } catch (error) {
@@ -70,18 +72,31 @@ function testeoDish() {
 }
 
 function testeoCategory() {
-  const category1 = new Category("Pizza", "Categoría de pizzas");
   console.log("");
   console.log("---------- TESTEO CATEGORY ----------");
-  console.log("Test 1:");
+
+  const category1 = new Category("Pizza", "Categoría de pizzas");
+
+  // Prueba 1: Mostramos el nombre
+  console.log("Test 1: Nombre");
   console.log("Esperado: Pizza");
   console.log("Resultado:", category1.name);
-  console.log("Descripción:", category1.description);
 
-  //Con error en name
+  //   Prueba 2: Mostramos la descripción
+  console.log("Test 2: Descripción");
+  console.log("Esperado: Categoría de pizzas");
+  console.log("Resultado:", category1.description);
+
+  //   Prueba 3: Mostramos el ToString
+  console.log("Test 3: ToString");
+  console.log("Esperado: Pizza - Categoría de pizzas");
+  console.log("Resultado:", category1.toString());
+
+  //Error: Name es Null
   try {
-    const category2 = new Category(null, "Categoría de pizzas");
-    console.log("Test 2:");
+    const category2 = new Category(null, "Categoría de pasta");
+    // Prueba 4: Mostramos la excepción
+    console.log("Test 4: Nombre null");
     console.log("Esperado: Error, hay una excepción");
     console.log("Resultado:", category2.name);
   } catch (error) {
@@ -90,21 +105,139 @@ function testeoCategory() {
 }
 
 function testeoAllergen() {
-  const allergen1 = new Allergen("Gluten", "Contiene gluten");
-
   console.log("");
   console.log("---------- TESTEO ALLERGEN ----------");
-  console.log("Test 1:");
+
+  const allergen1 = new Allergen("Gluten", "Contiene gluten");
+
+  // Prueba 1: Mostramos el nombre
+  console.log("Test 1: Nombre");
   console.log("Esperado: Gluten");
   console.log("Resultado:", allergen1.name);
-  console.log("Descripción:", allergen1.description);
+  //   Prueba 2: Mostramos la descripción
+  console.log("Test 2: Descripción");
+  console.log("Esperado: Contiene gluten");
+  console.log("Resultado::", allergen1.description);
+
+  //   Prueba 3: Mostramos el ToString
+  console.log("Test 3: ToString");
+  console.log("Esperado: Gluten - Contiene gluten");
+  console.log("Resultado:", allergen1.toString());
 
   //   DUDA PORQUE AQUÍ EN CONSOLA NO ME SALE EN ROJO
+  //Error: Name es Null
   try {
     const allergen2 = new Allergen(null, "Contiene gluten");
-    console.log("Test 2:");
+    // Prueba 4: Mostramos la excepción
+    console.log("Test 4: Nombre null");
     console.log("Esperado: Error, hay una excepción");
     console.log("Resultado:", allergen2.name);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function testeoRestaurante() {
+  console.log("");
+  console.log("---------- TESTEO RESTAURANTE - MENÚ  ----------");
+  const menu1 = new Menu(
+    "Especial de la Casa",
+    "Descubre nuestro exclusivo menú con platos únicos y especiales."
+  );
+
+  // Prueba 1: Mostramos el nombre
+  console.log("Test 1: Nombre");
+  console.log("Esperado: Especial de la Casa");
+  console.log("Resultado:", menu1.name);
+
+  //   Prueba 2: Mostramos la descripción
+  console.log("Test 2: Descripción");
+  console.log(
+    "Esperado: Descubre nuestro exclusivo menú con platos únicos y especiales"
+  );
+  console.log("Resultado:", menu1.description);
+
+  //   Prueba 3: Mostramos el ToString
+  console.log("Test 3: ToString");
+  console.log(
+    "Esperado: Especial de la Casa - Descubre nuestro exclusivo menú con platos únicos y especiales"
+  );
+  console.log("Resultado:", menu1.toString());
+
+  //Error: Name es Null
+  try {
+    const menu2 = new Menu(
+      null,
+      "Deliciosas opciones para disfrutar en la hora del desayuno."
+    );
+    // Prueba 4: Mostramos la excepción
+    console.log("Test 4: Nombre null");
+    console.log("Esperado: Error, hay una excepción");
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log("");
+  console.log("---------- TESTEO RESTAURANTE - RESTAURANTE  ----------");
+
+  const location1 = new Coordinate(38.9861, -3.927);
+  const restaurante1 = new Restaurant(
+    "Guridi",
+    "Restaurante famoso por su gastronomía",
+    location1
+  );
+
+  // Prueba 1: Mostramos el nombre
+  console.log("Test 1: Nombre");
+  console.log("Esperado: Guridi");
+  console.log("Resultado:", restaurante1.name);
+  //   Prueba 2: Mostramos la descripción
+  console.log("Test 2: Descripción");
+  console.log("Esperado: Restaurante famoso por su gastronomia");
+  console.log("Resultado:", restaurante1.description);
+  //   Prueba 3: Mostramos la coordenadas
+  console.log("Test 3: Coordenadas");
+  console.log("Esperado: 38.9861, -3.927");
+  console.log("Resultado:", restaurante1.location);
+  //   Prueba 4: Mostramos el ToString
+  console.log("Test 3: ToString");
+  console.log(
+    "Esperado: Guiridi - Restaurante famoso por su gastronomía - Ciudad Real"
+  );
+  console.log("Resultado:", restaurante1.toString());
+
+  //Error: Name es Null
+  try {
+    const restaurante2 = new Restaurant(
+      null,
+      "Las mejores hamburguesas",
+      "Madrid"
+    );
+    console.log("Test 5: Nombre null");
+    console.log("Esperado: Error, excepción");
+    console.log("Resultado:", restaurante2.name);
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log("");
+  console.log("---------- TESTEO RESTAURANTE - Coordinate ----------");
+
+  const coordinate1 = new Coordinate(40.4168, -3.7038);
+  // Prueba 1: Mostramos la latitud
+  console.log("Test 1: Latitud");
+  console.log("Esperado: 38.9861");
+  console.log("Resultado: ", coordinate1.latitude);
+  // Prueba 2: Mostramos la longitud
+  console.log("Test 2: Longitud");
+  console.log("Esperado: -3.927");
+  console.log("Resultado: ", coordinate1.longitude);
+  // Prueba 3: Mostramos el ToString
+  console.log("Test 3: ToString");
+  console.log("Esperado: 40.4168, -3.7038");
+  console.log("Resultado: ", coordinate1.toString());
+
+  try {
   } catch (error) {
     console.log(error);
   }
@@ -113,3 +246,4 @@ function testeoAllergen() {
 testeoDish();
 testeoCategory();
 testeoAllergen();
+testeoRestaurante();
