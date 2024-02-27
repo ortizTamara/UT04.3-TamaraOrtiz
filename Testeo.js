@@ -10,6 +10,7 @@ import {
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
+import { Category } from "./Category.js";
 
 //TESTEO DISH
 function testeoDish() {
@@ -22,6 +23,7 @@ function testeoDish() {
   );
 
   // Prueba 1: Aseguramos que el nombre sea correcto
+  console.log("---------- TESTEO DISH ----------");
   console.log("Test 1:");
   console.log("Esperado: Pizza");
   console.log("Resultado:", dish1.name);
@@ -40,7 +42,6 @@ function testeoDish() {
   console.log("Test 4:");
   console.log("Esperado: pizza1.jpg");
   console.log("Resultado:", dish1.image);
-  console.log("");
 
   // Prueba 5: Aseguramos que toString devuelve el formato esperado
   console.log("Test 5:");
@@ -59,12 +60,33 @@ function testeoDish() {
       "pizza2.jpg"
     );
 
-    console.log("Test 1:");
-    console.log("Esperado: Pizza");
+    console.log("Test 6:");
+    console.log("Esperado: Error, hay una excepción");
     console.log("Resultado:", dish2.name);
   } catch (error) {
     console.error(error);
   }
 }
 
+function testeoCategory() {
+  const category1 = new Category("Pizza", "Categoría de pizzas");
+  console.log("");
+  console.log("---------- TESTEO CATEGORY ----------");
+  console.log("Test 1:");
+  console.log("Esperado: Pizza");
+  console.log("Resultado:", category1.name);
+  console.log("Descripción:", category1.description);
+
+  //Con error en name
+  try {
+    const category2 = new Category(null, "Categoría de pizzas");
+    console.log("Test 2:");
+    console.log("Esperado: Error, hay una excepción");
+    console.log("Resultado:", category1.name);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 testeoDish();
+testeoCategory();
