@@ -252,56 +252,70 @@ function testeoRestaurante() {
 }
 
 function testeoRestaurantsManager() {
+  console.log("");
+  console.log("---------- TESTEO RESTAURANTS MANAGER ----------");
   const manager = new RestaurantsManager();
   const category1 = new Category("Entrante", "Categoría entrantes");
   const category2 = new Category("Postre", "Categoría de postres");
   const menu1 = new Menu("Menú 1", "Menú especial del día");
+  const menu2 = new Menu("Menú 2", "Menú de la abuela");
   const location2 = new Coordinate(38.9861, -3.927);
   const restaurant1 = new Restaurant(
     "Restaurante Pepa",
     "Restaurante del pueblo",
     location2
   );
-
+  console.log("");
+  console.log("---------- TESTEO CATEGORÍA ----------");
   // AÑADIMOS CAGETORÍA - Problema: no puedo añadir dos categorías a la vez
   console.log("Añadiendo categorías al manager...");
   console.log("category1:", category1);
-  // console.log("category2:", category2);
+  console.log("category2:", category2);
 
+  // PROBLEMA, no puedo añadir más de una categoría.
   try {
-    manager.addCategory(category1);
+    manager.addCategory(category1, category2);
     console.log("Categorías añadidas con éxito");
   } catch (error) {
     console.error("Error al añadir categorías:", error);
   }
 
-  // AÑADIMOS MENÚ
-  console.log(menu1.toString());
-  console.log("Añadiendo menú al manager...");
-  console.log("menu1:", menu1);
+  // Imprimimos las categorías usando el ITERADOR
+  console.log("Iterador de Categorías - Después de añadir");
+  for (const category of manager.categories) {
+    console.log(category.toString());
+  }
+
+  // ELIMINAMOS UNA CATEGORÍA
+  console.log("Eliminando categoría...");
   try {
-    manager.addMenu(menu1);
+    manager.removeCategory(category1);
+    console.log("Categoría eliminada con éxito");
+  } catch (error) {
+    console.error("Error al eliminar categoría:", error);
+  }
+
+  // Imprimimos las categorías usando el ITERADOR, después de eliminar
+  console.log("Iterador de Categorías - Después de eliminar");
+  for (const category of manager.categories) {
+    console.log(category.toString());
+  }
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+
+  console.log("");
+  console.log("---------- TESTEO MENÚ ----------");
+
+  // AÑADIMOS MENÚ
+  console.log("Añadiendo menús al manager...");
+  console.log("menu1:", menu1);
+  console.log("menu2:", menu2);
+  try {
+    manager.addMenu(menu1, menu2);
     console.log("Menú añadido con éxito");
   } catch (error) {
     console.error("Error al añadir menú:", error);
   }
-
-  // AÑADIMOS RESTAURANTE
-  // console.log("Añadiendo restaurante al manager...");
-  // console.log("restaurant1:", restaurant1);
-
-  // try {
-  //   manager.addRestaurant(restaurant1);
-  //   console.log("Restaurante añadido con éxito");
-  // } catch (error) {
-  //   console.error("Error al añadir restaurante:", error);
-  // }
-
-  // Imprimimos las categorías usando el ITERADOR
-  // console.log("Iterador de Categorías - Después de añadir");
-  // for (const category of manager.categories) {
-  //   console.log(category.toString());
-  // }
 
   // Imprimimos los menús usando el ITERADOR
   console.log("Iterador de Menús - Después de añadir");
@@ -309,11 +323,35 @@ function testeoRestaurantsManager() {
     console.log(menu.toString());
   }
 
-  // Imprimimos los restaurantes usando el ITERADOR
-  // console.log("Iterador de Restaurantes - Después de añadir");
-  // for (const restaurant of manager.restaurants) {
-  //   console.log(restaurant.toString());
-  // }
+  // BORRAMOS UN MENÚ
+  console.log("Eliminando menú...");
+  try {
+    manager.removeMenu(menu1);
+    console.log("Menú eliminado con éxito");
+  } catch (error) {
+    console.error("Error al eliminar menú:", error);
+  }
+
+  // Imprimimos los menús usando el ITERADOR, después de eliminar
+  console.log("Iterador de Menús - Después de añadir");
+  for (const menu of manager.menus) {
+    console.log(menu.toString());
+  }
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+
+  console.log("");
+  console.log("---------- TESTEO ALLERGEN ----------");
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  console.log("");
+  console.log("---------- TESTEO DISH ----------");
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+
+  console.log("");
+  console.log("---------- TESTEO RESTAURANT ----------");
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
 }
 
 testeoDish();

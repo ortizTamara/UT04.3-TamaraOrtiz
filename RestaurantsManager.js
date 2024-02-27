@@ -30,8 +30,8 @@ class RestaurantsManager {
 
   // Ordenamos las categorías de forma alfabética
   #sortCategoriesFunc = (catA, catB) =>
-    catA.category.title.toLocaleLowerCase() <
-    catB.category.title.toLocaleLowerCase()
+    catA.category.name.toLocaleLowerCase() <
+    catB.category.name.toLocaleLowerCase()
       ? -1
       : 1;
 
@@ -117,7 +117,7 @@ class RestaurantsManager {
         throw new CategoryIsNull(category);
       }
       const position = this.#getCategoryPosition(category);
-      if (position === -1) {
+      if (position === undefined || position === -1) {
         this.#categories.push({
           category,
           products: [],
@@ -133,9 +133,7 @@ class RestaurantsManager {
 
   // Encuentra la posición del category en el array #categories por su nombre.
   #getCategoryPosition(category) {
-    return this.#categories.findIndex(
-      (x) => x.category.title === category.title
-    );
+    return this.#categories.findIndex((x) => x.category.name === category.name);
   }
 
   // Elimina una categoría. Los platos quedarán desasignados de la categoría.
@@ -181,13 +179,12 @@ class RestaurantsManager {
   }
 
   // Elimina un menú
-  removeMenu(...menu) {
-    //O sería ...menuToRemove?
+  removeMenu(...menus) {
     for (const menu of menus) {
       if (!menu || !(menu instanceof Menu)) {
         throw new MenuIsNull(menu);
       }
-      const position = this.#getMenuPosition(menus); //cambiarlo a getMenuPosition
+      const position = this.#getMenuPosition(menu);
       if (position !== -1) {
         this.#menus.splice(position, 1);
       } else {
