@@ -39,7 +39,7 @@ class InvalidValueException extends BaseException {
       lineNumber
     );
     this.param = param;
-    this.name = "EmptyValueException";
+    this.name = "InvalidValueException";
   }
 }
 
@@ -83,6 +83,84 @@ class LongitudeException extends BaseException {
   }
 }
 
+class ManagerException extends BaseException {
+  constructor(message = "Error: Manager Exception.", fileName, lineNumber) {
+    super(message, fileName, lineNumber);
+    this.name = "ManagerException";
+  }
+}
+
+class CategoryExistsException extends ManagerException {
+  constructor(category, fileName, lineNumber) {
+    super(
+      `Error: The ${category.title} already exists in the manager.`,
+      fileName,
+      lineNumber
+    );
+    this.category = category;
+    this.name = "CategoryExistsException";
+  }
+}
+
+class CategoryIsNull extends BaseException {
+  constructor(category, fileName, lineNumber) {
+    super(
+      `Error: La categoría ${category.title} no puede ser null o no es un objeto Category.`,
+      fileName,
+      lineNumber
+    );
+    this.category = category;
+    this.name = "CategoryIsNull";
+  }
+}
+
+class CategoryNotRegistred extends BaseException {
+  constructor(category, fileName, lineNumber) {
+    super(
+      `Error: La categoría ${category.title} no esta registrada.`,
+      fileName,
+      lineNumber
+    );
+    this.category = category;
+    this.name = "CategoryNotRegistred";
+  }
+}
+
+class MenuExistsException extends ManagerException {
+  constructor(menu, fileName, lineNumber) {
+    super(
+      `Error: The menu ${menu.name} already exists in the manager.`,
+      fileName,
+      lineNumber
+    );
+    this.menu = menu;
+    this.name = "MenuExistsException";
+  }
+}
+class MenuIsNull extends BaseException {
+  constructor(menu, fileName, lineNumber) {
+    super(
+      `Error: La categoría ${menu.name}  no puede ser null o no es un objeto Menu.`,
+      fileName,
+      lineNumber
+    );
+    this.name = "MenuIsNull";
+  }
+}
+
+class MenuNotRegistred extends BaseException {
+  constructor(menu, fileName, lineNumber) {
+    super(
+      `Error: The menu ${menu.name} is not registered.`,
+      fileName,
+      lineNumber
+    );
+    this.menu = menu;
+    this.name = "MenuNotRegistred";
+  }
+}
+class DishIsNull extends BaseException {}
+
 export {
   BaseException,
   InvalidAccessConstructorException,
@@ -92,4 +170,11 @@ export {
   NameException,
   LatitudeException,
   LongitudeException,
+  ManagerException,
+  CategoryExistsException,
+  CategoryIsNull,
+  CategoryNotRegistred,
+  MenuExistsException,
+  MenuIsNull,
+  MenuNotRegistred,
 };

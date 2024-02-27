@@ -7,6 +7,13 @@ import {
   NameException,
   LatitudeException,
   LongitudeException,
+  ManagerException,
+  CategoryExistsException,
+  CategoryIsNull,
+  CategoryNotRegistred,
+  MenuExistsException,
+  MenuIsNull,
+  MenuNotRegistred,
 } from "../exceptions.js";
 
 class Category {

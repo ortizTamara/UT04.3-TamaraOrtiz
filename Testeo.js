@@ -7,12 +7,20 @@ import {
   NameException,
   LatitudeException,
   LongitudeException,
+  ManagerException,
+  CategoryExistsException,
+  CategoryIsNull,
+  CategoryNotRegistred,
+  MenuExistsException,
+  MenuIsNull,
+  MenuNotRegistred,
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
 import { Category } from "./category.js";
 import { Allergen } from "./allergen.js";
-import { Menu, Restaurant, Coordinate } from "./Restaurante.js"; //Aquí me da un problema si el archivo lo pongo con r minuscula
+import { Menu, Restaurant, Coordinate } from "./Restaurante.js";
+import { RestaurantsManager } from "./RestaurantsManager.js";
 
 //TESTEO DISH
 function testeoDish() {
@@ -243,7 +251,73 @@ function testeoRestaurante() {
   }
 }
 
+function testeoRestaurantsManager() {
+  const manager = new RestaurantsManager();
+  const category1 = new Category("Entrante", "Categoría entrantes");
+  const category2 = new Category("Postre", "Categoría de postres");
+  const menu1 = new Menu("Menú 1", "Menú especial del día");
+  const location2 = new Coordinate(38.9861, -3.927);
+  const restaurant1 = new Restaurant(
+    "Restaurante Pepa",
+    "Restaurante del pueblo",
+    location2
+  );
+
+  // AÑADIMOS CAGETORÍA - Problema: no puedo añadir dos categorías a la vez
+  console.log("Añadiendo categorías al manager...");
+  console.log("category1:", category1);
+  // console.log("category2:", category2);
+
+  try {
+    manager.addCategory(category1);
+    console.log("Categorías añadidas con éxito");
+  } catch (error) {
+    console.error("Error al añadir categorías:", error);
+  }
+
+  // AÑADIMOS MENÚ
+  console.log(menu1.toString());
+  console.log("Añadiendo menú al manager...");
+  console.log("menu1:", menu1);
+  try {
+    manager.addMenu(menu1);
+    console.log("Menú añadido con éxito");
+  } catch (error) {
+    console.error("Error al añadir menú:", error);
+  }
+
+  // AÑADIMOS RESTAURANTE
+  // console.log("Añadiendo restaurante al manager...");
+  // console.log("restaurant1:", restaurant1);
+
+  // try {
+  //   manager.addRestaurant(restaurant1);
+  //   console.log("Restaurante añadido con éxito");
+  // } catch (error) {
+  //   console.error("Error al añadir restaurante:", error);
+  // }
+
+  // Imprimimos las categorías usando el ITERADOR
+  // console.log("Iterador de Categorías - Después de añadir");
+  // for (const category of manager.categories) {
+  //   console.log(category.toString());
+  // }
+
+  // Imprimimos los menús usando el ITERADOR
+  console.log("Iterador de Menús - Después de añadir");
+  for (const menu of manager.menus) {
+    console.log(menu.toString());
+  }
+
+  // Imprimimos los restaurantes usando el ITERADOR
+  // console.log("Iterador de Restaurantes - Después de añadir");
+  // for (const restaurant of manager.restaurants) {
+  //   console.log(restaurant.toString());
+  // }
+}
+
 testeoDish();
 testeoCategory();
 testeoAllergen();
 testeoRestaurante();
+testeoRestaurantsManager();
