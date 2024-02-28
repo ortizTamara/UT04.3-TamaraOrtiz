@@ -20,6 +20,9 @@ import {
   DishExistsException,
   DishIsNull,
   DishNotRegistred,
+  RestaurantExistsException,
+  RestaurantIsNull,
+  RestaurantNotRegistred,
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -71,6 +74,12 @@ class RestaurantsManager {
 
   #sortDishFunc = (dishA, dishB) =>
     dishA.dish.name.toLocaleLowerCase() < dishB.dish.name.toLocaleLowerCase()
+      ? -1
+      : 1;
+
+  #sortRestaurantFunc = (restaurantA, restaurantB) =>
+    restaurantA.restaurant.name.toLocaleLowerCase() <
+    restaurantB.restaurant.name.toLocaleLowerCase()
       ? -1
       : 1;
 
@@ -127,8 +136,8 @@ class RestaurantsManager {
         const array = this.#restaurants;
         return {
           *[Symbol.iterator]() {
-            for (const arrayRestau of array) {
-              yield arrayRestau.Restaurant;
+            for (const arrayRest of array) {
+              yield arrayRest.restaurant;
             }
           },
         };
@@ -293,6 +302,46 @@ class RestaurantsManager {
         this.#dishes.splice(position, 1);
       } else {
         throw new DishNotRegistred(dish);
+      }
+    }
+    return this;
+  }
+
+  addRestaurant(...restaurants) {
+    for (const restaurant of restaurants) {
+      if (!restaurant || !(restaurant instanceof Restaurant)) {
+        throw new RestaurantIsNull(restaurant);
+      }
+      const position = this.#getRestaurantPosition(restaurant);
+      if (position === -1) {
+        this.#restaurants.push({
+          restaurant,
+          products: [],
+        });
+        this.#restaurants.sort(this.#sortRestaurantFunc);
+      } else {
+        console.log("Plato ya existe:", restaurant);
+        throw new RestaurantExistsException(restaurant);
+      }
+    }
+    return this;
+  }
+  #getRestaurantPosition(restaurant) {
+    return this.#restaurants.findIndex(
+      (x) => x.restaurant.name === restaurant.name
+    );
+  }
+
+  removeRestaurant(...restaurants) {
+    for (const restaurant of restaurants) {
+      if (!restaurant || !(restaurant instanceof Restaurant)) {
+        throw new RestaurantIsNull(restaurants);
+      }
+      const position = this.#getRestaurantPosition(restaurant);
+      if (position !== -1) {
+        this.#restaurants.splice(position, 1);
+      } else {
+        throw new RestaurantNotRegistred(restaurant);
       }
     }
     return this;

@@ -227,6 +227,44 @@ class DishNotRegistred extends BaseException {
   }
 }
 
+// Excepción para plato ya existente
+class RestaurantExistsException extends ManagerException {
+  constructor(restaurant, fileName, lineNumber) {
+    super(
+      `Error: ${restaurant.name} ya existe en el manager`,
+      fileName,
+      lineNumber
+    );
+    this.restaurant = restaurant;
+    this.name = "RestaurantExistsException";
+  }
+}
+
+// Excepción para plato nulo o no registrado
+class RestaurantIsNull extends BaseException {
+  constructor(restaurant, fileName, lineNumber) {
+    super(
+      `Error: ${restaurant.name} no puede ser null o no es un objeto Restaurant.`,
+      fileName,
+      lineNumber
+    );
+    this.restaurant = restaurant;
+    this.name = "RestaurantIsNull";
+  }
+}
+
+// Excepción para plato no registrado
+class RestaurantNotRegistred extends BaseException {
+  constructor(restaurant, fileName, lineNumber) {
+    super(
+      `Error: ${restaurant.name} no esta registrada.`,
+      fileName,
+      lineNumber
+    );
+    this.restaurant = restaurant;
+    this.name = "RestaurantNotRegistred";
+  }
+}
 export {
   BaseException,
   InvalidAccessConstructorException,
@@ -249,4 +287,7 @@ export {
   DishExistsException,
   DishIsNull,
   DishNotRegistred,
+  RestaurantExistsException,
+  RestaurantIsNull,
+  RestaurantNotRegistred,
 };

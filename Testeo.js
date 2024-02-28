@@ -20,6 +20,9 @@ import {
   DishExistsException,
   DishIsNull,
   DishNotRegistred,
+  RestaurantExistsException,
+  RestaurantIsNull,
+  RestaurantNotRegistred,
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -262,12 +265,6 @@ function testeoRestaurantsManager() {
   console.log("---------- TESTEO RESTAURANTS MANAGER ----------");
   const manager = new RestaurantsManager();
 
-  const location2 = new Coordinate(38.9861, -3.927);
-  const restaurant1 = new Restaurant(
-    "Restaurante Pepa",
-    "Restaurante del pueblo",
-    location2
-  );
   console.log("");
   console.log("---------- TESTEO CATEGORÍA ----------");
   const category1 = new Category("Entrante", "Categoría entrantes");
@@ -582,11 +579,6 @@ function testeoRestaurantsManager() {
   }
 
   // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
-
-  console.log("");
-  console.log("---------- TESTEO RESTAURANT ----------");
-  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
-
   console.log("");
   console.log("TEST 3: Name is null");
   try {
@@ -642,6 +634,110 @@ function testeoRestaurantsManager() {
     console.log(dish4.name, "eliminado con éxito");
   } catch (error) {
     console.error("Error al eliminar plato:");
+    console.log(error);
+  }
+
+  console.log("");
+  console.log("---------- TESTEO RESTAURANT ----------");
+
+  const location1 = new Coordinate(38.9861, -3.927);
+  const location2 = new Coordinate(39.4702, -0.3768);
+  const restaurant1 = new Restaurant(
+    "Guridi",
+    "Restaurante famoso por su gastronomía",
+    location1
+  );
+
+  const restaurant2 = new Restaurant(
+    "La Pepica",
+    "Famoso por su paella",
+    location2
+  );
+
+  try {
+    manager.addRestaurant(restaurant1, restaurant2);
+    console.log("Restaurantes añadidos con éxito");
+  } catch (error) {
+    console.log("Error al añadir Allergen:");
+    console.log(error);
+  }
+
+  // Imprimimos las Restaurants usando el ITERADOR
+  console.log("Iterador de Restaurants - Después de añadir");
+  for (const restaurant of manager.restaurants) {
+    console.log(restaurant.toString());
+  }
+
+  console.log("");
+  console.log("TEST 2: Eliminando Restaurant");
+  // BORRAMOS UN RESTAURANTE
+  console.log("Eliminando Restaurant...");
+  try {
+    manager.removeRestaurant(restaurant1);
+    console.log("Restaurante eliminado con éxito");
+  } catch (error) {
+    console.error("Error al eliminar Restaurante:");
+    console.log(error);
+  }
+
+  // Imprimimos las Restaurants usando el ITERADOR
+  console.log("Iterador de Restaurants - Después de borrar");
+  for (const restaurant of manager.restaurants) {
+    console.log(restaurant.toString());
+  }
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  console.log("");
+  console.log("TEST 3: Name is Null");
+
+  //Error: Name es Null
+  try {
+    const restaurant3 = new Restaurant(null, "Famoso por su paella", location2);
+
+    manager.addRestaurant(restaurant3);
+    console.log("Restaurante añadido con éxito");
+  } catch (error) {
+    console.log("Error al añadir Restaurante:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 4: No es un objeto Restaurant");
+  // ERROR: no es un objeto Restaurant
+  try {
+    const restaurant4 = new Category("Primeros", "Categoria de primeros");
+    manager.addRestaurant(restaurant4);
+    console.log("Restaurante añadido con éxito");
+  } catch (error) {
+    console.log("Error al añadir Restaurante:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 5: Restaurant ya existe");
+  //Error: Restaurant ya existe
+  try {
+    manager.addRestaurant(restaurant2);
+    console.log("Restaurante añadido con éxito");
+  } catch (error) {
+    console.log("Error al añadir Restaurante:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 6: Restaurant no esta registrado");
+  //ERROR: Restaurant no esta registrada
+  try {
+    const restaurant5 = new Restaurant(
+      "Juanito",
+      "Famoso por asado",
+      location2
+    );
+
+    manager.removeRestaurant(restaurant5);
+    console.log("Restaurante eliminado con éxito");
+  } catch (error) {
+    console.log("Error al eliminar Restaurante:");
     console.log(error);
   }
 }
