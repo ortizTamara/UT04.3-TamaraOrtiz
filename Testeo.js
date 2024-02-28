@@ -17,6 +17,9 @@ import {
   AllergenExistsException,
   AllergenIsNull,
   AllergenNotRegistred,
+  DishExistsException,
+  DishIsNull,
+  DishNotRegistred,
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -270,7 +273,7 @@ function testeoRestaurantsManager() {
   const category1 = new Category("Entrante", "Categoría entrantes");
   const category2 = new Category("Postre", "Categoría de postres");
 
-  // AÑADIMOS CAGETORÍA - Problema: no puedo añadir dos categorías a la vez
+  // AÑADIMOS CAGETORÍA
   console.log("TEST 1: Añadiendo Categoría");
   console.log("Añadiendo categorías al manager...");
   console.log("category1:", category1);
@@ -325,9 +328,9 @@ function testeoRestaurantsManager() {
   console.log("TEST 4: No es un Objeto Category");
   // ERROR: no es un objeto Category
   try {
-    const menu3 = new Menu("Menú 3", "Menú de Navidad");
+    const category4 = new Menu("Sushi", "Categoría de sushi");
 
-    manager.addCategory(menu3);
+    manager.addCategory(category4);
     console.log("Categorías añadidas con éxito");
   } catch (error) {
     console.error(error);
@@ -415,9 +418,9 @@ function testeoRestaurantsManager() {
   console.log("TEST 4: No es un objeto Menú");
   // ERROR: no es un objeto Menu
   try {
-    const category4 = new Category("Sushi", "Categoría de sushi");
+    const menu4 = new Category("Primeros", "Categoria de primeros");
 
-    manager.addMenu(category4);
+    manager.addMenu(menu4);
     console.log("Menú añadidas con éxito");
   } catch (error) {
     console.log("Error al añadir menú:");
@@ -505,9 +508,8 @@ function testeoRestaurantsManager() {
   console.log("TEST 4: No es un objeto Allergen");
   // ERROR: no es un objeto Allergen
   try {
-    const category4 = new Category("Sushi", "Categoría de sushi");
-
-    manager.addAllergen(category4);
+    const allergen4 = new Category("Primeros", "Categoria de primeros");
+    manager.addAllergen(allergen4);
     console.log("Allergen añadidas con éxito");
   } catch (error) {
     console.log("Error al añadir Allergen:");
@@ -539,12 +541,109 @@ function testeoRestaurantsManager() {
 
   console.log("");
   console.log("---------- TESTEO DISH ----------");
+  const dish1 = new Dish(
+    "Pizza Peperoni",
+    "La mejor pizza del mundo",
+    ["Tomate", "Queso", "Peperoni", "Oregano"],
+    "pizza1.jpg"
+  );
+
+  const dish2 = new Dish(
+    "Pasta Carbonara",
+    "La mejor carbonara de Italia"[
+      ("espaguetis", "beicon", "Yema de huevo", "Queso")
+    ],
+    "espaguetis1.jpg"
+  );
+
+  // AÑADIMOS PLATO
+  console.log("TEST 1: Añadiendo Plato");
+  console.log("Añadiendo menús al manager...");
+  console.log("plato1:", dish1);
+  console.log("plato2:", dish2);
+
+  try {
+    manager.addDish(dish1, dish2);
+    console.log(dish1.name, "y", dish2.name, "añadido con éxito");
+  } catch (error) {
+    console.error("Error al añadir Plato:", error);
+  }
+
+  console.log("");
+  console.log("TEST 2: Borrando Plato");
+  // BORRAMOS PLATO
+  console.log("Eliminando plato...");
+  try {
+    manager.removeDish(dish1);
+    console.log(dish1.name, "eliminado con éxito");
+  } catch (error) {
+    console.error("Error al eliminar plato:");
+    console.log(error);
+  }
 
   // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
 
   console.log("");
   console.log("---------- TESTEO RESTAURANT ----------");
   // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+
+  console.log("");
+  console.log("TEST 3: Name is null");
+  try {
+    const dish3 = new Dish(
+      null,
+      "Los mejores macarrones estudiantil"[
+        ("macarrones", "beicon", "salchichas", "Tomate", "Queso")
+      ],
+      "macarrones1.jpg"
+    );
+
+    manager.addDish(dish3);
+    console.log("plato añadido con éxito");
+  } catch (error) {
+    console.log("Error al añadir plato:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 4: No es un objeto Dish");
+  try {
+    const dish4 = new Allergen("Gluten", "Contiene gluten");
+    manager.addDish(dish4);
+    console.log("plato añadido con éxito");
+  } catch (error) {
+    console.log("Error al añadir plato:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 5: Plato ya existe");
+  try {
+    manager.addDish(dish2);
+    console.log("plato añadido con éxito");
+  } catch (error) {
+    console.log("Error al añadir plato:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 6: plato no esta registrado");
+  console.log("Eliminando plato...");
+  try {
+    const dish4 = new Dish(
+      "macarrones",
+      "Los mejores macarrones estudiantil"[
+        ("macarrones", "beicon", "salchichas", "Tomate", "Queso")
+      ],
+      "macarrones1.jpg"
+    );
+
+    manager.removeDish(dish4);
+    console.log(dish4.name, "eliminado con éxito");
+  } catch (error) {
+    console.error("Error al eliminar plato:");
+    console.log(error);
+  }
 }
 
 testeoDish();
@@ -552,3 +651,10 @@ testeoCategory();
 testeoAllergen();
 testeoRestaurante();
 testeoRestaurantsManager();
+
+/*
+PREGUNTAR:
+CUANDO CREO UN PLATO, ESTE DEBERÁ DE ASIGNARSE A CATEGORÍA? 
+Y EN PLATO SE DEBERÍA DE ASIGNAR LOS ALERGENOS?
+Y DONDE IRÍA MENÚS? A CATEGORÍA O TAMBIÉN A PLATOS?
+*/

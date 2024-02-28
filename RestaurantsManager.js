@@ -17,6 +17,9 @@ import {
   AllergenExistsException,
   AllergenIsNull,
   AllergenNotRegistred,
+  DishExistsException,
+  DishIsNull,
+  DishNotRegistred,
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -29,6 +32,7 @@ class RestaurantsManager {
   #categories = [];
   #menus = [];
   #allergens = [];
+  #dishes = [];
   #restaurants = [];
 
   // Ordenamos las categorías de forma alfabética
@@ -62,6 +66,11 @@ class RestaurantsManager {
   #sortAllergensFunc = (allergenA, allergenB) =>
     allergenA.allergen.name.toLocaleLowerCase() <
     allergenB.allergen.name.toLocaleLowerCase()
+      ? -1
+      : 1;
+
+  #sortDishFunc = (dishA, dishB) =>
+    dishA.dish.name.toLocaleLowerCase() < dishB.dish.name.toLocaleLowerCase()
       ? -1
       : 1;
 
@@ -250,7 +259,44 @@ class RestaurantsManager {
     return this;
   }
 
-  addDish(...Dish) {}
+  addDish(...dishes) {
+    for (const dish of dishes) {
+      if (!dish || !(dish instanceof Dish)) {
+        throw new DishIsNull(dish);
+      }
+      const position = this.#getDishPosition(dish);
+      if (position === -1) {
+        this.#dishes.push({
+          dish,
+          products: [],
+        });
+        this.#dishes.sort(this.#sortDishFunc);
+      } else {
+        console.log("Plato ya existe:", dish);
+        throw new DishExistsException(dish);
+      }
+    }
+    return this;
+  }
+
+  #getDishPosition(dish) {
+    return this.#dishes.findIndex((x) => x.dish.name === dish.name);
+  }
+
+  removeDish(...dishes) {
+    for (const dish of dishes) {
+      if (!dish || !(dish instanceof Dish)) {
+        throw new DishIsNull(dish);
+      }
+      const position = this.#getDishPosition(dish);
+      if (position !== -1) {
+        this.#dishes.splice(position, 1);
+      } else {
+        throw new DishNotRegistred(dish);
+      }
+    }
+    return this;
+  }
 }
 
 export { RestaurantsManager };

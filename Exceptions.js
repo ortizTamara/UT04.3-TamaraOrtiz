@@ -195,7 +195,37 @@ class AllergenNotRegistred extends BaseException {
     this.name = "AllergenNotRegistred";
   }
 }
-class DishIsNull extends BaseException {}
+
+// Excepción para plato ya existente
+class DishExistsException extends ManagerException {
+  constructor(dish, fileName, lineNumber) {
+    super(`Error: ${dish.name} ya existe en el manager`, fileName, lineNumber);
+    this.dish = dish;
+    this.name = "DishExistsException";
+  }
+}
+
+// Excepción para plato nulo o no registrado
+class DishIsNull extends BaseException {
+  constructor(dish, fileName, lineNumber) {
+    super(
+      `Error: ${dish.name} no puede ser null o no es un objeto Dish.`,
+      fileName,
+      lineNumber
+    );
+    this.dish = dish;
+    this.name = "DishIsNull";
+  }
+}
+
+// Excepción para plato no registrado
+class DishNotRegistred extends BaseException {
+  constructor(dish, fileName, lineNumber) {
+    super(`Error: ${dish.name} no esta registrada.`, fileName, lineNumber);
+    this.dish = dish;
+    this.name = "DishNotRegistred";
+  }
+}
 
 export {
   BaseException,
@@ -216,4 +246,7 @@ export {
   AllergenExistsException,
   AllergenIsNull,
   AllergenNotRegistred,
+  DishExistsException,
+  DishIsNull,
+  DishNotRegistred,
 };
