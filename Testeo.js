@@ -14,6 +14,9 @@ import {
   MenuExistsException,
   MenuIsNull,
   MenuNotRegistred,
+  AllergenExistsException,
+  AllergenIsNull,
+  AllergenNotRegistred,
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -255,10 +258,7 @@ function testeoRestaurantsManager() {
   console.log("");
   console.log("---------- TESTEO RESTAURANTS MANAGER ----------");
   const manager = new RestaurantsManager();
-  const category1 = new Category("Entrante", "Categoría entrantes");
-  const category2 = new Category("Postre", "Categoría de postres");
-  const menu1 = new Menu("Menú 1", "Menú especial del día");
-  const menu2 = new Menu("Menú 2", "Menú de la abuela");
+
   const location2 = new Coordinate(38.9861, -3.927);
   const restaurant1 = new Restaurant(
     "Restaurante Pepa",
@@ -267,12 +267,15 @@ function testeoRestaurantsManager() {
   );
   console.log("");
   console.log("---------- TESTEO CATEGORÍA ----------");
+  const category1 = new Category("Entrante", "Categoría entrantes");
+  const category2 = new Category("Postre", "Categoría de postres");
+
   // AÑADIMOS CAGETORÍA - Problema: no puedo añadir dos categorías a la vez
+  console.log("TEST 1: Añadiendo Categoría");
   console.log("Añadiendo categorías al manager...");
   console.log("category1:", category1);
   console.log("category2:", category2);
 
-  // PROBLEMA, no puedo añadir más de una categoría.
   try {
     manager.addCategory(category1, category2);
     console.log("Categorías añadidas con éxito");
@@ -286,13 +289,16 @@ function testeoRestaurantsManager() {
     console.log(category.toString());
   }
 
+  console.log("");
+  console.log("TEST 2: Eliminando Categoría");
   // ELIMINAMOS UNA CATEGORÍA
   console.log("Eliminando categoría...");
   try {
     manager.removeCategory(category1);
     console.log("Categoría eliminada con éxito");
   } catch (error) {
-    console.error("Error al eliminar categoría:", error);
+    console.error("Error al eliminar categoría:");
+    console.log(error);
   }
 
   // Imprimimos las categorías usando el ITERADOR, después de eliminar
@@ -301,12 +307,62 @@ function testeoRestaurantsManager() {
     console.log(category.toString());
   }
 
+  console.log("");
+  console.log("TEST 3: Name is Null");
   // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  //ERROR: name es Null
+  try {
+    const category3 = new Category(null, "Categoría de pasta");
+
+    manager.addCategory(category3);
+    console.log("Categorías añadidas con éxito");
+  } catch (error) {
+    console.log("Error al añadir categorías:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 4: No es un Objeto Category");
+  // ERROR: no es un objeto Category
+  try {
+    const menu3 = new Menu("Menú 3", "Menú de Navidad");
+
+    manager.addCategory(menu3);
+    console.log("Categorías añadidas con éxito");
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 5: Categoría ya existe");
+  //ERROR: La categoría ya existe
+  try {
+    manager.addCategory(category2);
+    console.log("Categorías añadidas con éxito");
+  } catch (error) {
+    console.log("Error al añadir categorías:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 6: Categoría no esta registrada");
+  //ERROR: La categoría no esta registrada
+  try {
+    const category4 = new Category("Boloñesa", "Categoría de pasta");
+    manager.removeCategory(category4);
+    console.log("Categoría eliminada con éxito");
+  } catch (error) {
+    console.log("Error al eliminar categoría:");
+    console.error(error);
+  }
 
   console.log("");
   console.log("---------- TESTEO MENÚ ----------");
+  const menu1 = new Menu("Menú 1", "Menú especial del día");
+  const menu2 = new Menu("Menú 2", "Menú de la abuela");
 
   // AÑADIMOS MENÚ
+  console.log("TEST 1: Añadiendo Menú");
   console.log("Añadiendo menús al manager...");
   console.log("menu1:", menu1);
   console.log("menu2:", menu2);
@@ -323,27 +379,164 @@ function testeoRestaurantsManager() {
     console.log(menu.toString());
   }
 
+  console.log("");
+  console.log("TEST 2: Eliminando menú");
   // BORRAMOS UN MENÚ
   console.log("Eliminando menú...");
   try {
     manager.removeMenu(menu1);
     console.log("Menú eliminado con éxito");
   } catch (error) {
-    console.error("Error al eliminar menú:", error);
+    console.error("Error al eliminar menú:");
+    console.log(error);
   }
 
   // Imprimimos los menús usando el ITERADOR, después de eliminar
-  console.log("Iterador de Menús - Después de añadir");
+  console.log("Iterador de Menús - Después de eliminar");
   for (const menu of manager.menus) {
     console.log(menu.toString());
   }
 
   // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  console.log("");
+  console.log("TEST 3: Name is Null");
+  //Error: Name es Null
+  try {
+    const menu4 = new Menu(null, "Menú especial navidad");
+
+    manager.addMenu(menu4);
+    console.log("Categorías añadidas con éxito");
+  } catch (error) {
+    console.log("Error al añadir menú:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 4: No es un objeto Menú");
+  // ERROR: no es un objeto Menu
+  try {
+    const category4 = new Category("Sushi", "Categoría de sushi");
+
+    manager.addMenu(category4);
+    console.log("Menú añadidas con éxito");
+  } catch (error) {
+    console.log("Error al añadir menú:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 5: Menú ya existe");
+  //Error: La menú ya existe
+  try {
+    manager.addMenu(menu2);
+    console.log("Menu añadidas con éxito");
+  } catch (error) {
+    console.log("Error al añadir Menu:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 6: Menú no esta registrado");
+  //ERROR: La menú no esta registrada
+  try {
+    const menu5 = new Menu("Menú 5", "Menú especial fería");
+    manager.removeMenu(menu5);
+    console.log("Categoría eliminada con éxito");
+  } catch (error) {
+    console.log("Error al eliminar categoría:");
+    console.error(error);
+  }
 
   console.log("");
   console.log("---------- TESTEO ALLERGEN ----------");
+  const allergen1 = new Allergen("Gluten", "Contiene gluten");
+  const allergen2 = new Allergen("Lactosa", "Contiene lactosa");
+  // AÑADIMOS MENÚ
+  console.log("TEST 1: Añadiendo Allergen");
+  console.log("Añadiendo alergenos al manager...");
+  console.log("allergen1:", allergen1);
+  console.log("allergen2:", allergen2);
+  try {
+    manager.addAllergen(allergen1, allergen2);
+    console.log("Allergen añadido con éxito");
+  } catch (error) {
+    console.error("Error al añadir Allergen:", error);
+  }
+
+  // Imprimimos los menús usando el ITERADOR
+  console.log("Iterador de Allergen - Después de añadir: ");
+  for (const allergen of manager.allergens) {
+    console.log(allergen.toString());
+  }
+
+  console.log("");
+  console.log("TEST 2: Eliminando Allergen");
+  // BORRAMOS UN MENÚ
+  console.log("Eliminando Allergen...");
+  try {
+    manager.removeAllergen(allergen2);
+    console.log("Allergen eliminado con éxito");
+  } catch (error) {
+    console.error("Error al eliminar Allergen:");
+    console.log(error);
+  }
+
+  // Imprimimos los menús usando el ITERADOR, después de eliminar
+  console.log("Iterador de Allergen - Después de eliminar: ");
+  for (const allergen of manager.allergens) {
+    console.log(allergen.toString());
+  }
 
   // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  console.log("");
+  console.log("TEST 3: Name is Null");
+  //Error: Name es Null
+  try {
+    const allergen3 = new Allergen(null, "Contiene cacahuete");
+
+    manager.addAllergen(allergen3);
+    console.log("Allergen añadidas con éxito");
+  } catch (error) {
+    console.log("Error al añadir Allergen:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 4: No es un objeto Allergen");
+  // ERROR: no es un objeto Allergen
+  try {
+    const category4 = new Category("Sushi", "Categoría de sushi");
+
+    manager.addAllergen(category4);
+    console.log("Allergen añadidas con éxito");
+  } catch (error) {
+    console.log("Error al añadir Allergen:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 5: Allergen ya existe");
+  //Error: Allergen ya existe
+  try {
+    manager.addAllergen(allergen1);
+    console.log("Allergen añadidas con éxito");
+  } catch (error) {
+    console.log("Error al añadir Allergen:");
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 6: Allergen no esta registrado");
+  //ERROR: Allergen no esta registrada
+  try {
+    const allergen4 = new Allergen("Maní", "Contiene cacahuete");
+    manager.removeAllergen(allergen4);
+    console.log("Allergen eliminado con éxito");
+  } catch (error) {
+    console.log("Error al eliminar Allergen:");
+    console.log(error);
+  }
+
   console.log("");
   console.log("---------- TESTEO DISH ----------");
 

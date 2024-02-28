@@ -7,6 +7,16 @@ import {
   NameException,
   LatitudeException,
   LongitudeException,
+  ManagerException,
+  CategoryExistsException,
+  CategoryIsNull,
+  CategoryNotRegistred,
+  MenuExistsException,
+  MenuIsNull,
+  MenuNotRegistred,
+  AllergenExistsException,
+  AllergenIsNull,
+  AllergenNotRegistred,
 } from "../exceptions.js";
 
 class Dish {

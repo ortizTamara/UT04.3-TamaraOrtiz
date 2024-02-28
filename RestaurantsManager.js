@@ -14,6 +14,9 @@ import {
   MenuExistsException,
   MenuIsNull,
   MenuNotRegistred,
+  AllergenExistsException,
+  AllergenIsNull,
+  AllergenNotRegistred,
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -35,18 +38,32 @@ class RestaurantsManager {
       ? -1
       : 1;
 
-  #sortMenusFunc = (menuA, menuB) => {
-    const titleA = menuA.menu.name.toLowerCase();
-    const titleB = menuB.menu.name.toLowerCase();
+  // Ordenamos los menús de forma alfabética
+  #sortMenusFunc = (menuA, menuB) =>
+    menuA.menu.name.toLocaleLowerCase() < menuB.menu.name.toLocaleLowerCase()
+      ? -1
+      : 1;
 
-    if (titleA < titleB) {
-      return -1;
-    }
-    if (titleA > titleB) {
-      return 1;
-    }
-    return 0;
-  };
+  // OTRA FORMA DE HACERLO:
+  //   #sortMenusFunc = (menuA, menuB) => {
+  //     const titleA = menuA.menu.name.toLowerCase();
+  //     const titleB = menuB.menu.name.toLowerCase();
+
+  //     if (titleA < titleB) {
+  //       return -1;
+  //     }
+  //     if (titleA > titleB) {
+  //       return 1;
+  //     }
+  //     return 0;
+  //   };
+
+  // Ordenamos los Alergenos de forma alfabética
+  #sortAllergensFunc = (allergenA, allergenB) =>
+    allergenA.allergen.name.toLocaleLowerCase() <
+    allergenB.allergen.name.toLocaleLowerCase()
+      ? -1
+      : 1;
 
   constructor() {
     // GETTER CATEGORIES
@@ -87,7 +104,7 @@ class RestaurantsManager {
         return {
           *[Symbol.iterator]() {
             for (const arrayAller of array) {
-              yield arrayAller.Allergen;
+              yield arrayAller.allergen;
             }
           },
         };
@@ -124,7 +141,7 @@ class RestaurantsManager {
         });
         this.#categories.sort(this.#sortCategoriesFunc);
       } else {
-        console.log("Category already exists:", category);
+        console.log("Category ya existe:", category);
         throw new CategoryExistsException(category);
       }
     }
@@ -138,13 +155,12 @@ class RestaurantsManager {
 
   // Elimina una categoría. Los platos quedarán desasignados de la categoría.
   removeCategory(...categories) {
-    //O sería ...categoriesToRemove?
     for (const category of categories) {
       if (category === null || !(category instanceof Category)) {
         throw new CategoryIsNull(category);
       }
       const position = this.#getCategoryPosition(category);
-      if (position !== -1) {
+      if (position === undefined || position !== -1) {
         this.#categories.splice(position, 1);
       } else {
         throw new CategoryNotRegistred(category);
@@ -167,6 +183,7 @@ class RestaurantsManager {
         });
         this.#menus.sort(this.#sortMenusFunc);
       } else {
+        console.log("Menú ya existe:", menu);
         throw new MenuExistsException(menu);
       }
     }
@@ -194,9 +211,44 @@ class RestaurantsManager {
     return this;
   }
 
-  addAllergen(...allergens) {}
+  addAllergen(...allergens) {
+    for (const allergen of allergens) {
+      if (!allergen || !(allergen instanceof Allergen)) {
+        throw new AllergenIsNull(allergen);
+      }
+      const position = this.#getAllergenPosition(allergen);
+      if (position === -1) {
+        this.#allergens.push({
+          allergen,
+          products: [],
+        });
+        this.#allergens.sort(this.#sortAllergensFunc);
+      } else {
+        console.log("Menú ya existe:", allergen);
+        throw new AllergenExistsException(allergen);
+      }
+    }
+    return this;
+  }
 
-  removeAllergen(...allergens) {}
+  #getAllergenPosition(allergen) {
+    return this.#allergens.findIndex((x) => x.allergen.name === allergen.name);
+  }
+
+  removeAllergen(...allergens) {
+    for (const allergen of allergens) {
+      if (!allergen || !(allergen instanceof Allergen)) {
+        throw new AllergenIsNull(allergen);
+      }
+      const position = this.#getAllergenPosition(allergen);
+      if (position !== -1) {
+        this.#allergens.splice(position, 1);
+      } else {
+        throw new AllergenNotRegistred(allergen);
+      }
+    }
+    return this;
+  }
 
   addDish(...Dish) {}
 }

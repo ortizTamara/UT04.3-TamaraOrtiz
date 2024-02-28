@@ -14,6 +14,9 @@ import {
   MenuExistsException,
   MenuIsNull,
   MenuNotRegistred,
+  AllergenExistsException,
+  AllergenIsNull,
+  AllergenNotRegistred,
 } from "../exceptions.js";
 
 class Category {

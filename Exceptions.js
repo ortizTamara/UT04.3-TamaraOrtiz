@@ -52,15 +52,15 @@ class AbstractClassException extends BaseException {
   }
 }
 
-//Excepción name, obligatorio
+// Excepción para nombre obligatorio
 class NameException extends BaseException {
   constructor(className, fileName, lineNumber) {
     super(`Error: El ${className} es obligatorio.`, fileName, lineNumber);
-    this.name = "NameException ";
+    this.name = "NameException";
   }
 }
 
-//Excepción coordenadas
+// Excepción para coordenadas de latitud
 class LatitudeException extends BaseException {
   constructor(className, fileName, lineNumber) {
     super(
@@ -68,10 +68,11 @@ class LatitudeException extends BaseException {
       fileName,
       lineNumber
     );
-    this.name = "LatitudeException ";
+    this.name = "LatitudeException";
   }
 }
 
+// Excepción para coordenadas de longitud
 class LongitudeException extends BaseException {
   constructor(className, fileName, lineNumber) {
     super(
@@ -79,10 +80,11 @@ class LongitudeException extends BaseException {
       fileName,
       lineNumber
     );
-    this.name = "LongitudeException ";
+    this.name = "LongitudeException";
   }
 }
 
+// Excepción genérica para problemas del manager
 class ManagerException extends BaseException {
   constructor(message = "Error: Manager Exception.", fileName, lineNumber) {
     super(message, fileName, lineNumber);
@@ -90,10 +92,11 @@ class ManagerException extends BaseException {
   }
 }
 
+// Excepción para categoría ya existente
 class CategoryExistsException extends ManagerException {
   constructor(category, fileName, lineNumber) {
     super(
-      `Error: The ${category.title} already exists in the manager.`,
+      `Error: ${category.name} ya existe en el manager`,
       fileName,
       lineNumber
     );
@@ -102,10 +105,11 @@ class CategoryExistsException extends ManagerException {
   }
 }
 
+// Excepción para categoría nula o no registrada
 class CategoryIsNull extends BaseException {
   constructor(category, fileName, lineNumber) {
     super(
-      `Error: La categoría ${category.title} no puede ser null o no es un objeto Category.`,
+      `Error: La categoría ${category.name} no puede ser null o no es un objeto Category.`,
       fileName,
       lineNumber
     );
@@ -114,10 +118,11 @@ class CategoryIsNull extends BaseException {
   }
 }
 
+// Excepción para categoría no registrada
 class CategoryNotRegistred extends BaseException {
   constructor(category, fileName, lineNumber) {
     super(
-      `Error: La categoría ${category.title} no esta registrada.`,
+      `Error: La categoría ${category.name} no esta registrada.`,
       fileName,
       lineNumber
     );
@@ -126,21 +131,20 @@ class CategoryNotRegistred extends BaseException {
   }
 }
 
+// Excepción para menú ya existente
 class MenuExistsException extends ManagerException {
   constructor(menu, fileName, lineNumber) {
-    super(
-      `Error: The menu ${menu.name} already exists in the manager.`,
-      fileName,
-      lineNumber
-    );
+    super(`Error:  ${menu.name} ya existe en el manager`, fileName, lineNumber);
     this.menu = menu;
     this.name = "MenuExistsException";
   }
 }
+
+// Excepción para menú nulo o no registrado
 class MenuIsNull extends BaseException {
   constructor(menu, fileName, lineNumber) {
     super(
-      `Error: La categoría ${menu.name}  no puede ser null o no es un objeto Menu.`,
+      `Error: La categoría ${menu.name} no puede ser null o no es un objeto Menu.`,
       fileName,
       lineNumber
     );
@@ -148,15 +152,47 @@ class MenuIsNull extends BaseException {
   }
 }
 
+// Excepción para menú no registrado
 class MenuNotRegistred extends BaseException {
   constructor(menu, fileName, lineNumber) {
+    super(`Error: ${menu.name} no esta registrada.`, fileName, lineNumber);
+    this.menu = menu;
+    this.name = "MenuNotRegistred";
+  }
+}
+
+// Excepción para alérgeno ya existente
+class AllergenExistsException extends ManagerException {
+  constructor(allergen, fileName, lineNumber) {
     super(
-      `Error: The menu ${menu.name} is not registered.`,
+      `Error: ${allergen.name} ya existe en el manager`,
       fileName,
       lineNumber
     );
-    this.menu = menu;
-    this.name = "MenuNotRegistred";
+    this.allergen = allergen;
+    this.name = "AllergenExistsException";
+  }
+}
+
+// Excepción para alérgeno nulo o no registrado
+class AllergenIsNull extends BaseException {
+  constructor(allergen, fileName, lineNumber) {
+    super(
+      `Error: ${allergen.name} no puede ser null o no es un objeto Allergen.`,
+      fileName,
+      lineNumber
+    );
+    this.allergen = allergen;
+    this.name = "AllergenIsNull";
+  }
+}
+
+// Excepción para alérgeno no registrado
+class AllergenNotRegistred extends BaseException {
+  constructor(allergen, fileName, lineNumber) {
+    super(`Error: ${allergen.name} no esta registrada.`, fileName, lineNumber);
+    this.allergen = allergen;
+    this.name = "AllergenNotRegistred";
   }
 }
 class DishIsNull extends BaseException {}
@@ -177,4 +213,7 @@ export {
   MenuExistsException,
   MenuIsNull,
   MenuNotRegistred,
+  AllergenExistsException,
+  AllergenIsNull,
+  AllergenNotRegistred,
 };

@@ -135,7 +135,7 @@ class Coordinate {
   }
 
   toString() {
-    return `${this.#latitude} ${this.#longitude}`;
+    return `Latitude: ${this.#latitude}, Longitude: ${this.#longitude}`;
   }
 }
 
