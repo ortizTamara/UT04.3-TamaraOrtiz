@@ -23,6 +23,9 @@ import {
   RestaurantExistsException,
   RestaurantIsNull,
   RestaurantNotRegistred,
+  CategoryAssignDishException,
+  CategoryNullException,
+  DishNullException,
 } from "./exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -345,6 +348,62 @@ class RestaurantsManager {
       }
     }
     return this;
+  }
+
+  assignCategoryToDish(category, ...dish) {
+    // Verificamos si Category es null
+    if (!category) {
+      throw new CategoryNullException(category);
+    }
+
+    // Verificamos si Dish es null
+    if (!dish) {
+      throw new DishNullException(dish);
+    }
+
+    // Verificamos si Category existe, si no es así, la añadimos
+    const categoryExists = this.#categories.some(
+      (cat) => cat.category.name === category.name
+    );
+    if (!categoryExists) {
+      this.addCategory(category);
+    }
+
+    // Verificamos si Dish existe, si no es así, la añadimos
+    const dishExists = this.#dishes.some((d) => d.dish.name === dish.name);
+    if (!dishExists) {
+      this.addDish(dish);
+    }
+
+    // Verificar si la categoría existe, si no, añadirla al sistema
+    let categoryPosition = this.#getCategoryPosition(category);
+    if (categoryPosition === -1) {
+      this.addCategory(category);
+      categoryPosition = this.#getCategoryPosition(category);
+    }
+
+    // Verificar si el plato existe, si no, añadirlo al sistema
+    let dishPosition = this.#getDishPosition(dish);
+    if (dishPosition === -1) {
+      this.addDish(dish);
+      dishPosition = this.#getDishPosition(dish);
+    }
+
+    // Verificar si el plato ya está asignado a la categoría
+    const dishInCategoryPosition = this.#getDishPositionInCategory(
+      dish,
+      this.#categories[categoryPosition]
+    );
+    if (dishInCategoryPosition !== -1) {
+      throw new CategoryAssignDishException(dish, category);
+    }
+
+    // Asignar el plato a la categoría
+    this.#categories[categoryPosition].dishes.push(this.#dishes[dishPosition]);
+  }
+
+  #getDishPositionInCategory(category, dish) {
+    return dish.products.findIndex((x) => x.serial === category.serial);
   }
 }
 

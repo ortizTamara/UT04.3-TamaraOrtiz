@@ -140,7 +140,7 @@ class MenuExistsException extends ManagerException {
   }
 }
 
-// Excepción para menú nulo o no registrado
+// Excepción para Menu nulo o no es un objeto Menu
 class MenuIsNull extends BaseException {
   constructor(menu, fileName, lineNumber) {
     super(
@@ -161,7 +161,7 @@ class MenuNotRegistred extends BaseException {
   }
 }
 
-// Excepción para alérgeno ya existente
+// Excepción para Allergen ya existente
 class AllergenExistsException extends ManagerException {
   constructor(allergen, fileName, lineNumber) {
     super(
@@ -174,7 +174,7 @@ class AllergenExistsException extends ManagerException {
   }
 }
 
-// Excepción para alérgeno nulo o no registrado
+// Excepción para Allergen nulo o no objeto Allergen
 class AllergenIsNull extends BaseException {
   constructor(allergen, fileName, lineNumber) {
     super(
@@ -187,7 +187,7 @@ class AllergenIsNull extends BaseException {
   }
 }
 
-// Excepción para alérgeno no registrado
+// Excepción para Allergen no registrado
 class AllergenNotRegistred extends BaseException {
   constructor(allergen, fileName, lineNumber) {
     super(`Error: ${allergen.name} no esta registrada.`, fileName, lineNumber);
@@ -205,7 +205,7 @@ class DishExistsException extends ManagerException {
   }
 }
 
-// Excepción para plato nulo o no registrado
+// Excepción para plato nulo o no es un objeto Dish
 class DishIsNull extends BaseException {
   constructor(dish, fileName, lineNumber) {
     super(
@@ -227,7 +227,7 @@ class DishNotRegistred extends BaseException {
   }
 }
 
-// Excepción para plato ya existente
+// Excepción para restaurante ya existente
 class RestaurantExistsException extends ManagerException {
   constructor(restaurant, fileName, lineNumber) {
     super(
@@ -240,7 +240,7 @@ class RestaurantExistsException extends ManagerException {
   }
 }
 
-// Excepción para plato nulo o no registrado
+// Excepción para restaurante nulo o no es un objeto restaurante
 class RestaurantIsNull extends BaseException {
   constructor(restaurant, fileName, lineNumber) {
     super(
@@ -253,7 +253,7 @@ class RestaurantIsNull extends BaseException {
   }
 }
 
-// Excepción para plato no registrado
+// Excepción para restaurante no registrado
 class RestaurantNotRegistred extends BaseException {
   constructor(restaurant, fileName, lineNumber) {
     super(
@@ -265,6 +265,35 @@ class RestaurantNotRegistred extends BaseException {
     this.name = "RestaurantNotRegistred";
   }
 }
+
+// Excepción al intentar asignar una categoría a un plato
+class CategoryAssignDishException extends BaseException {
+  constructor(category, dish, fileName, lineNumber) {
+    super(
+      `Error al asignar ${category.name} a ${dish.name}: `,
+      fileName,
+      lineNumber
+    );
+    this.name = "CategoryAssignDishException";
+  }
+}
+
+// Excepción para indicar que la categoría es nula
+class CategoryNullException extends BaseException {
+  constructor(category, fileName, lineNumber) {
+    super(`La ${category.name} proporcionada es null.`, fileName, lineNumber);
+    this.name = "CategoryNullException";
+  }
+}
+
+// Excepción para indicar que el plato es nulo
+class DishNullException extends BaseException {
+  constructor(dish, fileName, lineNumber) {
+    super(`El ${dish.name} proporcionado es null.`, fileName, lineNumber);
+    this.name = "DishNullException";
+  }
+}
+
 export {
   BaseException,
   InvalidAccessConstructorException,
@@ -290,4 +319,7 @@ export {
   RestaurantExistsException,
   RestaurantIsNull,
   RestaurantNotRegistred,
+  CategoryAssignDishException,
+  CategoryNullException,
+  DishNullException,
 };

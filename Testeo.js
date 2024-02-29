@@ -654,6 +654,8 @@ function testeoRestaurantsManager() {
     location2
   );
 
+  console.log("");
+  console.log("TEST 1: añadiendo Restaurant");
   try {
     manager.addRestaurant(restaurant1, restaurant2);
     console.log("Restaurantes añadidos con éxito");
@@ -742,11 +744,55 @@ function testeoRestaurantsManager() {
   }
 }
 
+function testeoAsignacion() {
+  const manager = new RestaurantsManager();
+
+  console.log("");
+  console.log("---------- TESTEO ASIGNACIÓN PLATO A CATEGORÍA  ----------");
+  const category5 = new Category("Entrante", "Categoría de entrantes");
+  const dish5 = new Dish(
+    "Croquetas",
+    "Croquetas caseras de jamón",
+    ["jamón", "bechamel", "pan rallado"],
+    "croquetas.jpg"
+  );
+
+  // Lo añadimos a Category
+  try {
+    manager.addCategory(category5);
+    console.log("Categorías añadidas con éxito");
+  } catch (error) {
+    console.error("Error al añadir categorías:", error);
+  }
+  console.log("Iterador de Categorías - Después de añadir");
+  for (const category of manager.categories) {
+    console.log(category.toString());
+  }
+
+  // Lo añadimos a Dish
+  try {
+    manager.addDish(dish5);
+    console.log(dish5.name, "añadido con éxito");
+  } catch (error) {
+    console.error("Error al añadir Plato:", error);
+  }
+
+  console.log("");
+  console.log("TEST 1: Asignando plato a categoría");
+  try {
+    manager.assignCategoryToDish(category5, dish5);
+    console.log("Asignación exitosa:", category5.name, "->", dish5.name);
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+}
+
 testeoDish();
 testeoCategory();
 testeoAllergen();
 testeoRestaurante();
 testeoRestaurantsManager();
+testeoAsignacion();
 
 /*
 PREGUNTAR:
