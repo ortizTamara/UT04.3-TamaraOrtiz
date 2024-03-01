@@ -26,7 +26,7 @@ import {
   CategoryAssignDishException,
   CategoryNullException,
   DishNullException,
-} from "./exceptions.js";
+} from "./Exceptions.js";
 
 import { Dish } from "./dish.js";
 import { Category } from "./category.js";
@@ -54,24 +54,9 @@ class RestaurantsManager {
       ? -1
       : 1;
 
-  // OTRA FORMA DE HACERLO:
-  //   #sortMenusFunc = (menuA, menuB) => {
-  //     const titleA = menuA.menu.name.toLowerCase();
-  //     const titleB = menuB.menu.name.toLowerCase();
-
-  //     if (titleA < titleB) {
-  //       return -1;
-  //     }
-  //     if (titleA > titleB) {
-  //       return 1;
-  //     }
-  //     return 0;
-  //   };
-
   // Ordenamos los Alergenos de forma alfabética
   #sortAllergensFunc = (allergenA, allergenB) =>
-    allergenA.allergen.name.toLocaleLowerCase() <
-    allergenB.allergen.name.toLocaleLowerCase()
+    allergenA.name.toLocaleLowerCase() < allergenB.name.toLocaleLowerCase()
       ? -1
       : 1;
 
@@ -124,8 +109,8 @@ class RestaurantsManager {
         const array = this.#allergens;
         return {
           *[Symbol.iterator]() {
-            for (const arrayAller of array) {
-              yield arrayAller.allergen;
+            for (const allergen of array) {
+              yield allergen;
             }
           },
         };
@@ -158,7 +143,7 @@ class RestaurantsManager {
       if (position === undefined || position === -1) {
         this.#categories.push({
           category,
-          products: [],
+          dishes: [],
         });
         this.#categories.sort(this.#sortCategoriesFunc);
       } else {
@@ -200,7 +185,7 @@ class RestaurantsManager {
       if (position === -1) {
         this.#menus.push({
           menu,
-          products: [],
+          dish: [],
         });
         this.#menus.sort(this.#sortMenusFunc);
       } else {
@@ -239,10 +224,7 @@ class RestaurantsManager {
       }
       const position = this.#getAllergenPosition(allergen);
       if (position === -1) {
-        this.#allergens.push({
-          allergen,
-          products: [],
-        });
+        this.#allergens.push(allergen);
         this.#allergens.sort(this.#sortAllergensFunc);
       } else {
         console.log("Menú ya existe:", allergen);
@@ -253,7 +235,7 @@ class RestaurantsManager {
   }
 
   #getAllergenPosition(allergen) {
-    return this.#allergens.findIndex((x) => x.allergen.name === allergen.name);
+    return this.#allergens.findIndex((x) => x.name === allergen.name);
   }
 
   removeAllergen(...allergens) {
@@ -280,7 +262,7 @@ class RestaurantsManager {
       if (position === -1) {
         this.#dishes.push({
           dish,
-          products: [],
+          allergens: [],
         });
         this.#dishes.sort(this.#sortDishFunc);
       } else {
@@ -350,60 +332,61 @@ class RestaurantsManager {
     return this;
   }
 
-  assignCategoryToDish(category, ...dish) {
-    // Verificamos si Category es null
-    if (!category) {
-      throw new CategoryNullException(category);
+  assignCategoryToDish(category, ...dishes) {
+    // Verificamos si Category existe
+    // Obtenemos la posición de la categoría
+    let catPosition = this.#getCategoryPosition(category);
+    // Verificamos si la categoría es nula para no seguir avanzando
+    if (!category instanceof Category) {
+      throw new CategoryIsNull(category);
+      // Si no es nula
     }
-
-    // Verificamos si Dish es null
-    if (!dish) {
-      throw new DishNullException(dish);
-    }
-
-    // Verificamos si Category existe, si no es así, la añadimos
-    const categoryExists = this.#categories.some(
-      (cat) => cat.category.name === category.name
-    );
-    if (!categoryExists) {
+    //Y no existe, lo añadimos
+    if (catPosition === -1) {
       this.addCategory(category);
+      catPosition = this.#getCategoryPosition(category);
     }
 
-    // Verificamos si Dish existe, si no es así, la añadimos
-    const dishExists = this.#dishes.some((d) => d.dish.name === dish.name);
-    if (!dishExists) {
-      this.addDish(dish);
+    const storedCategory = this.#categories[catPosition];
+
+    // Comprobamos si es nulo
+    if (!dishes instanceof Dish) {
+      throw new DishIsNull(dishes);
     }
 
-    // Verificar si la categoría existe, si no, añadirla al sistema
-    let categoryPosition = this.#getCategoryPosition(category);
-    if (categoryPosition === -1) {
-      this.addCategory(category);
-      categoryPosition = this.#getCategoryPosition(category);
-    }
+    // Verificamos si Dish existe
+    // Recorremos los platos en la lista
+    for (const dish of dishes) {
+      // Obtenemos la posición de platos
+      let dishPosition = this.#getDishPosition(dish);
 
-    // Verificar si el plato existe, si no, añadirlo al sistema
-    let dishPosition = this.#getDishPosition(dish);
-    if (dishPosition === -1) {
-      this.addDish(dish);
-      dishPosition = this.#getDishPosition(dish);
-    }
+      // Y si no existe, lo añadimos
+      if (dishPosition === -1) {
+        this.addDish(dish);
+        dishPosition = this.#getDishPosition(dish);
+      }
 
-    // Verificar si el plato ya está asignado a la categoría
-    const dishInCategoryPosition = this.#getDishPositionInCategory(
-      dish,
-      this.#categories[categoryPosition]
-    );
-    if (dishInCategoryPosition !== -1) {
-      throw new CategoryAssignDishException(dish, category);
-    }
+      const storedDish = this.#dishes[dishPosition];
 
-    // Asignar el plato a la categoría
-    this.#categories[categoryPosition].dishes.push(this.#dishes[dishPosition]);
+      // Verificamos si el plato ya está asignado a la categoría
+      const dishInCategoryPosition = this.#getDishPositionInCategory(
+        storedCategory.dishes,
+        storedDish.dish
+      );
+
+      // Si esta asignado, saltamos una excepción
+      if (dishInCategoryPosition !== -1) {
+        throw new CategoryAssignDishException(dishes, category);
+      }
+
+      // Si no esta asignado, se le asigna a la categoría
+      storedCategory.dishes.push(storedDish);
+    }
+    return this;
   }
 
-  #getDishPositionInCategory(category, dish) {
-    return dish.products.findIndex((x) => x.serial === category.serial);
+  #getDishPositionInCategory(dishes, dish) {
+    return dishes.findIndex((x) => x.name === dish.name);
   }
 }
 

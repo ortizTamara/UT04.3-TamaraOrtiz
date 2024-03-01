@@ -23,7 +23,7 @@ import {
   RestaurantExistsException,
   RestaurantIsNull,
   RestaurantNotRegistred,
-} from "./exceptions.js";
+} from "./Exceptions.js";
 
 import { Dish } from "./dish.js";
 import { Category } from "./category.js";
@@ -441,9 +441,9 @@ function testeoRestaurantsManager() {
   try {
     const menu5 = new Menu("Menú 5", "Menú especial fería");
     manager.removeMenu(menu5);
-    console.log("Categoría eliminada con éxito");
+    console.log("Menu eliminada con éxito");
   } catch (error) {
-    console.log("Error al eliminar categoría:");
+    console.log("Error al eliminar Menu:");
     console.error(error);
   }
 
@@ -451,7 +451,7 @@ function testeoRestaurantsManager() {
   console.log("---------- TESTEO ALLERGEN ----------");
   const allergen1 = new Allergen("Gluten", "Contiene gluten");
   const allergen2 = new Allergen("Lactosa", "Contiene lactosa");
-  // AÑADIMOS MENÚ
+  // AÑADIMOS ALLERGEN
   console.log("TEST 1: Añadiendo Allergen");
   console.log("Añadiendo alergenos al manager...");
   console.log("allergen1:", allergen1);
@@ -754,7 +754,7 @@ function testeoAsignacion() {
     "Croquetas",
     "Croquetas caseras de jamón",
     ["jamón", "bechamel", "pan rallado"],
-    "croquetas.jpg"
+    "croquetas1.jpg"
   );
 
   // Lo añadimos a Category
@@ -764,7 +764,8 @@ function testeoAsignacion() {
   } catch (error) {
     console.error("Error al añadir categorías:", error);
   }
-  console.log("Iterador de Categorías - Después de añadir");
+
+  console.log("Iterador de Categorías - Después de añadir:");
   for (const category of manager.categories) {
     console.log(category.toString());
   }
@@ -772,7 +773,7 @@ function testeoAsignacion() {
   // Lo añadimos a Dish
   try {
     manager.addDish(dish5);
-    console.log(dish5.name, "añadido con éxito");
+    console.log("Añadido con éxito:", dish5.toString());
   } catch (error) {
     console.error("Error al añadir Plato:", error);
   }
@@ -781,7 +782,7 @@ function testeoAsignacion() {
   console.log("TEST 1: Asignando plato a categoría");
   try {
     manager.assignCategoryToDish(category5, dish5);
-    console.log("Asignación exitosa:", category5.name, "->", dish5.name);
+    console.log("Asignación exitosa:", dish5.name, "->", category5.name);
   } catch (error) {
     console.error("Error en la asignación:", error);
   }
@@ -796,7 +797,7 @@ testeoAsignacion();
 
 /*
 PREGUNTAR:
-CUANDO CREO UN PLATO, ESTE DEBERÁ DE ASIGNARSE A CATEGORÍA? 
-Y EN PLATO SE DEBERÍA DE ASIGNAR LOS ALERGENOS?
-Y DONDE IRÍA MENÚS? A CATEGORÍA O TAMBIÉN A PLATOS?
+Asignar platos directamente a categorías y menús, y asignar alérgenos directamente a platos. 
+- Cada plato sabe exactamente en qué categoría o categorías se encuentra y que alérgenos tiene.  
+- Cada menú conoce los platos que contiene.
 */
