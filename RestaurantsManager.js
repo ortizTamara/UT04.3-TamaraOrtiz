@@ -26,6 +26,7 @@ import {
   CategoryAssignDishException,
   CategoryNullException,
   DishNullException,
+  DishAssignAllergenException,
 } from "./Exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -429,6 +430,53 @@ class RestaurantsManager {
 
   assignAllergenToDish(dish, ...allergens) {
     let dishPosition = this.#getDishPosition(dish);
+
+    if (!(dish instanceof Dish)) {
+      throw new DishIsNull(dish);
+    }
+
+    if (dishPosition === -1) {
+      this.addDish(dish);
+      dishPosition = this.#getDishPosition(dish);
+    }
+
+    const storedDish = this.#dishes[dishPosition];
+
+    // Recorremos cada alérgeno en la lista
+    for (const allergen of allergens) {
+      // Comprobamos si el alérgeno es nulo
+      if (!(allergen instanceof Allergen)) {
+        throw new AllergenIsNull(allergen);
+      }
+      //Obtenemos la posición de los alergenos
+      let allergenPosition = this.#getAllergenPosition(allergen);
+
+      // Y si no existe, lo añadimos
+      if (allergenPosition === -1) {
+        this.addAllergen(allergen);
+        allergenPosition = this.#getAllergenPosition(allergen);
+      }
+
+      const storedAllergen = this.#allergens[allergenPosition];
+
+      // Verificamos si el alérgeno ya está asignado al plato
+      const allergenInDishPosition = this.#getAllergenPositionInDish(
+        storedDish.allergens,
+        storedAllergen.allergen
+      );
+
+      if (allergenInDishPosition !== -1) {
+        throw new DishAssignAllergenException(allergens, dish);
+      }
+
+      // Si no esta asignado, se le asigna a la categoría
+      storedDish.allergens.push(storedAllergen);
+    }
+    return this;
+  }
+
+  #getAllergenPositionInDish(allergens, allergen) {
+    return allergens.findIndex((x) => x.name === allergen.name);
   }
 }
 

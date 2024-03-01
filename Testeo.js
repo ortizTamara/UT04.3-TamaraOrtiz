@@ -747,8 +747,6 @@ function testeoRestaurantsManager() {
 function testeoAssignAndDesign() {
   const manager = new RestaurantsManager();
 
-  console.log("");
-  console.log("---------- TESTEO ASIGNACIÓN PLATO A CATEGORÍA  ----------");
   const category5 = new Category("Entrante", "Categoría de entrantes");
   const category6 = new Category("Comida", "Categoría de comida");
   const category7 = new Category("Postre", "Categoría para postres");
@@ -784,6 +782,8 @@ function testeoAssignAndDesign() {
     ["tomate", "pimiento", "calabacín", "cebolla", "ajo", "sal"],
     "pisto1.jpg"
   );
+  console.log("");
+  console.log("---------- TESTEO ASIGNACIÓN PLATO A CATEGORÍA  ----------");
 
   // Lo añadimos a Category
   console.log("Añadiendo categoría...");
@@ -922,6 +922,49 @@ function testeoAssignAndDesign() {
   // } catch (error) {
   //   console.error(error);
   // }
+
+  console.log("");
+  console.log("---------- TESTEO ASIGNACIÓN ALERGENO A PLATO  ----------");
+  const dish10 = new Dish(
+    "Pizza",
+    "La mejor pizza del mundo",
+    ["Tomate", "Queso", "Peperoni", "Oregano"],
+    "pizza1.jpg"
+  );
+
+  const allergen1 = new Allergen("Gluten", "Contiene gluten");
+
+  // Lo añadimos a Dish
+  console.log("Añadiendo platos...");
+  try {
+    manager.addDish(dish10);
+    console.log("Añadido con éxito:", dish10.toString());
+  } catch (error) {
+    console.error("Error al añadir Plato:", error);
+  }
+
+  console.log("Añadiendo alergenos...");
+  try {
+    manager.addAllergen(allergen1);
+    console.log("Allergen añadido con éxito:", allergen1.toString());
+  } catch (error) {
+    console.error("Error al añadir Allergen:", error);
+  }
+
+  // Imprimimos los menús usando el ITERADOR
+  console.log("Iterador de Allergen - Después de añadir: ");
+  for (const allergen of manager.allergens) {
+    console.log(allergen.toString());
+  }
+
+  console.log("");
+  console.log("TEST 9: Asignando alergeno a plato");
+  try {
+    manager.assignAllergenToDish(dish10, allergen1);
+    console.log("Asignación exitosa:", allergen1.name, "->", dish10.name);
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
 }
 
 testeoDish();
@@ -932,7 +975,6 @@ testeoRestaurantsManager();
 testeoAssignAndDesign();
 
 /*
-PREGUNTAR:
 Asignar platos directamente a categorías y menús, y asignar alérgenos directamente a platos. 
 - Cada plato sabe exactamente en qué categoría o categorías se encuentra y que alérgenos tiene.  
 - Cada menú conoce los platos que contiene.

@@ -266,7 +266,7 @@ class RestaurantNotRegistred extends BaseException {
   }
 }
 
-// Excepción al intentar asignar una categoría a un plato
+// Excepción al intentar asignar un plato a una categoría
 class CategoryAssignDishException extends BaseException {
   constructor(category, dish, fileName, lineNumber) {
     super(
@@ -291,6 +291,18 @@ class DishNullException extends BaseException {
   constructor(dish, fileName, lineNumber) {
     super(`El ${dish.name} proporcionado es null.`, fileName, lineNumber);
     this.name = "DishNullException";
+  }
+}
+
+// Excepción al intentar asignar un alergeno a un plato
+class DishAssignAllergenException extends BaseException {
+  constructor(allergen, dish, fileName, lineNumber) {
+    super(
+      `Error al asignar ${allergen.name} a ${dish.name}: `,
+      fileName,
+      lineNumber
+    );
+    this.name = "DishAssignAllergenException";
   }
 }
 
@@ -322,4 +334,5 @@ export {
   CategoryAssignDishException,
   CategoryNullException,
   DishNullException,
+  DishAssignAllergenException,
 };
