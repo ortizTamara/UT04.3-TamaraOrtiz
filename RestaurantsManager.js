@@ -124,6 +124,7 @@ class RestaurantsManager {
         const array = this.#restaurants;
         return {
           *[Symbol.iterator]() {
+            //Lo hacemos así porque los alergenos se añaden directamente a su colección.
             for (const arrayRest of array) {
               yield arrayRest.restaurant;
             }
@@ -337,9 +338,8 @@ class RestaurantsManager {
     // Obtenemos la posición de la categoría
     let catPosition = this.#getCategoryPosition(category);
     // Verificamos si la categoría es nula para no seguir avanzando
-    if (!category instanceof Category) {
+    if (!(category instanceof Category)) {
       throw new CategoryIsNull(category);
-      // Si no es nula
     }
     //Y no existe, lo añadimos
     if (catPosition === -1) {
@@ -349,14 +349,13 @@ class RestaurantsManager {
 
     const storedCategory = this.#categories[catPosition];
 
-    // Comprobamos si es nulo
-    if (!dishes instanceof Dish) {
-      throw new DishIsNull(dishes);
-    }
-
     // Verificamos si Dish existe
     // Recorremos los platos en la lista
     for (const dish of dishes) {
+      // Comprobamos si es nulo
+      if (!(dish instanceof Dish)) {
+        throw new DishIsNull(dishes);
+      }
       // Obtenemos la posición de platos
       let dishPosition = this.#getDishPosition(dish);
 
@@ -388,6 +387,64 @@ class RestaurantsManager {
   #getDishPositionInCategory(dishes, dish) {
     return dishes.findIndex((x) => x.name === dish.name);
   }
+
+  deassignCategoryToDish(category, ...dishes) {
+    // Verificamos si la categoría es nula para no seguir avanzando
+    if (!(category instanceof Category)) {
+      throw new CategoryIsNull(category);
+    }
+
+    // Buscamos la categoría en la lista de categorías registradas para obtener su posición.
+    let catPosition = this.#getCategoryPosition(category);
+    // Si la categoría no está registrada, lanza una excepción.
+    if (catPosition === -1) {
+      throw new CategoryNotRegistred(category);
+    }
+
+    // Obtenemos la categoría almacenada usando la posición encontrada.
+    const storedCategory = this.#categories[catPosition];
+
+    // Recorremos los platos en la lista
+    for (const dish of dishes) {
+      // Verificamos si plato es nula para no seguir avanzando
+      if (!(dish instanceof Dish)) {
+        throw new DishIsNull(dish);
+      }
+
+      // Encontramos la posición del plato en la lista de platos de la categoría.
+      let dishPosition = this.#getDishPositionInCategory(
+        storedCategory.dishes,
+        dish
+      );
+
+      // Si el plato está en categoría, lo eliminamos de la lista de platos de esa categoría
+      if (dishPosition !== -1) {
+        storedCategory.dishes.splice(dishPosition, 1);
+      } else {
+        // Si el plato no está en la categoría, lanza una excepción
+        throw new DishNotRegistred(dish);
+      }
+    }
+  }
+
+  assignAllergenToDish(dish, ...allergens) {
+    let dishPosition = this.#getDishPosition(dish);
+  }
 }
 
 export { RestaurantsManager };
+
+/*
+Tenemos categoría:
+- Categoría5 Entrante -> Que tiene plato5 (Croquetas)
+- Categoría6 Comida -> Que tiene plato 6(tortilla) y 7 (Paella)
+- Categoría7 Postre -> Que tiene plato8(Flan)
+- Categoría8 Cena -> Que tiene plato9 (Pisto)
+Categoría 5 añadida
+Plato5 y plato6 añadido
+category6 añadido al sistema
+plato 7 añadido al sistema
+Categoría7 Añadido al sistema
+
+Tengo que hacer un segundo plato (postre) para categoría 7
+*/

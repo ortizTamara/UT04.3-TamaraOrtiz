@@ -744,20 +744,49 @@ function testeoRestaurantsManager() {
   }
 }
 
-function testeoAsignacion() {
+function testeoAssignAndDesign() {
   const manager = new RestaurantsManager();
 
   console.log("");
   console.log("---------- TESTEO ASIGNACIÓN PLATO A CATEGORÍA  ----------");
   const category5 = new Category("Entrante", "Categoría de entrantes");
+  const category6 = new Category("Comida", "Categoría de comida");
+  const category7 = new Category("Postre", "Categoría para postres");
+  const category8 = new Category("Cena", "Categoría para cena");
   const dish5 = new Dish(
     "Croquetas",
     "Croquetas caseras de jamón",
     ["jamón", "bechamel", "pan rallado"],
     "croquetas1.jpg"
   );
+  const dish6 = new Dish(
+    "Tortilla de Patatas",
+    "Tortilla de Patatas autentica",
+    ["patata", "huevo", "cebolla"],
+    "tortilla1.jpg"
+  );
+  const dish7 = new Dish(
+    "Paella Valenciana",
+    "Plato tradicional de Valencia con arroz, pollo, y azafrán.",
+    ["arroz", "pollo", "azafrán"],
+    "paella_valenciana1.jpg"
+  );
+
+  const dish8 = new Dish(
+    "Flan de huevo",
+    "Un postre tradicional a base de huevo",
+    ["huevo", "leche", "azúcar"],
+    "flan1.jpg"
+  );
+  const dish9 = new Dish(
+    "Pisto",
+    "Un guiso tradicional de verduras",
+    ["tomate", "pimiento", "calabacín", "cebolla", "ajo", "sal"],
+    "pisto1.jpg"
+  );
 
   // Lo añadimos a Category
+  console.log("Añadiendo categoría...");
   try {
     manager.addCategory(category5);
     console.log("Categorías añadidas con éxito");
@@ -771,9 +800,11 @@ function testeoAsignacion() {
   }
 
   // Lo añadimos a Dish
+  console.log("Añadiendo platos...");
   try {
-    manager.addDish(dish5);
+    manager.addDish(dish5, dish6);
     console.log("Añadido con éxito:", dish5.toString());
+    console.log("Añadido con éxito:", dish6.toString());
   } catch (error) {
     console.error("Error al añadir Plato:", error);
   }
@@ -786,6 +817,111 @@ function testeoAsignacion() {
   } catch (error) {
     console.error("Error en la asignación:", error);
   }
+
+  // Objeto Category no existe, lo añadimos al sistema
+  console.log("");
+  console.log("TEST 2: Asignando plato a categoría - Categoría no existe");
+  try {
+    manager.assignCategoryToDish(category6, dish6);
+    console.log("Asignación exitosa:", dish6.name, "->", category6.name);
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+  console.log("");
+  console.log("Iterador de Categorías:");
+  for (const category of manager.categories) {
+    console.log(category.toString());
+  }
+
+  // Objeto Dish no existe, lo añadimos al sistema
+  console.log("");
+  console.log("TEST 3: Asignando plato a categoría - Plato no existe");
+  try {
+    manager.assignCategoryToDish(category6, dish7);
+    console.log("Asignación exitosa:", dish7.name, "->", category6.name);
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  console.log("");
+  console.log("TEST 4: Category es null");
+  // ERROR: Category es null
+  try {
+    manager.assignCategoryToDish(null, dish6);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 5: Dish es null");
+  try {
+    manager.assignCategoryToDish(category7, null);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("Iterador de Categorías - Comprobación de excepción:");
+  for (const category of manager.categories) {
+    console.log(category.toString());
+  }
+
+  console.log("");
+  console.log("---------- TESTEO DESIGNACIÓN PLATO DE CATEGORÍA  ----------");
+  console.log("TEST 5: Designar plato de categoría");
+  console.log("Designando...");
+  try {
+    manager.deassignCategoryToDish(category5, dish5);
+    console.log("Designación exitosa:", dish5.name, "->", category5.name);
+  } catch (error) {
+    console.error("Error en la Designación:", error);
+  }
+
+  // // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  // console.log("");
+  // console.log("TEST 6: Categoría es null");
+  // try {
+  //   manager.deassignCategoryToDish(null, dish6);
+  // } catch (error) {
+  //   console.error(error);
+  // }
+
+  // console.log("");
+  // console.log("TEST 7: Categoría no esta registrada");
+  // // ERROR: Categoría no registrada
+  // try {
+  //   manager.deassignCategoryToDish(category8, dish7); //Ponemos plato7 aunque no vaya a esa categoría.
+  //   console.log("Designación exitosa:", dish7.name, "->", category8.name);
+  // } catch (error) {
+  //   console.error(error);
+  // }
+
+  // console.log("");
+  // console.log("TEST 8: Plato no esta registrada");
+  // // ERROR: Plato no registrado
+  // try {
+  //   manager.deassignCategoryToDish(category7, dish8);
+  //   console.log("Designación exitosa:", dish8.name, "->", category7.name);
+  // } catch (error) {
+  //   console.error(error);
+  // }
+
+  // // Comprobamos el Iterador de Categorías
+  // console.log("");
+  // console.log("Iterador de Categorías - Comprobación de excepción:");
+  // for (const category of manager.categories) {
+  //   console.log(category.toString());
+  // }
+
+  // ERROR: Designación de plato erroneo, es decir, que no esta en esa categoría.
+  // try {
+  //   // ARREGLAR: NO DEBERÍA DE DESIGNAR
+  //   manager.deassignCategoryToDish(category5, dish6);
+  //   console.log("Designación exitosa:", dish6.name, "->", category5.name);
+  // } catch (error) {
+  //   console.error(error);
+  // }
 }
 
 testeoDish();
@@ -793,7 +929,7 @@ testeoCategory();
 testeoAllergen();
 testeoRestaurante();
 testeoRestaurantsManager();
-testeoAsignacion();
+testeoAssignAndDesign();
 
 /*
 PREGUNTAR:
