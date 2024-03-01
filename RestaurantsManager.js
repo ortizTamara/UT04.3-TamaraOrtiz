@@ -380,7 +380,7 @@ class RestaurantsManager {
       }
 
       // Si no esta asignado, se le asigna a la categoría
-      storedCategory.dishes.push(storedDish);
+      storedCategory.dishes.push(storedDish.dish);
     }
     return this;
   }
@@ -417,7 +417,7 @@ class RestaurantsManager {
         storedCategory.dishes,
         dish
       );
-
+      // console.log(dishPosition);
       // Si el plato está en categoría, lo eliminamos de la lista de platos de esa categoría
       if (dishPosition !== -1) {
         storedCategory.dishes.splice(dishPosition, 1);
@@ -427,6 +427,10 @@ class RestaurantsManager {
       }
     }
   }
+
+  // getCategories() {
+  //   return this.#categories;
+  // }
 
   assignAllergenToDish(dish, ...allergens) {
     let dishPosition = this.#getDishPosition(dish);
@@ -448,6 +452,7 @@ class RestaurantsManager {
       if (!(allergen instanceof Allergen)) {
         throw new AllergenIsNull(allergen);
       }
+
       //Obtenemos la posición de los alergenos
       let allergenPosition = this.#getAllergenPosition(allergen);
 
@@ -465,6 +470,8 @@ class RestaurantsManager {
         storedAllergen.allergen
       );
 
+      console.log(allergenInDishPosition);
+
       if (allergenInDishPosition !== -1) {
         throw new DishAssignAllergenException(allergens, dish);
       }
@@ -477,6 +484,10 @@ class RestaurantsManager {
 
   #getAllergenPositionInDish(allergens, allergen) {
     return allergens.findIndex((x) => x.name === allergen.name);
+  }
+
+  getDish() {
+    return this.#dishes;
   }
 }
 
@@ -494,5 +505,9 @@ category6 añadido al sistema
 plato 7 añadido al sistema
 Categoría7 Añadido al sistema
 
-Tengo que hacer un segundo plato (postre) para categoría 7
+Tenemos plato:
+plato10 pizza -> Que tiene alergeno1(gluten)
+plato11 pollo cacahuete -> Que tiene alergeno2(cacahuete)
+plato12 Pad Thai -> Que tiene alergeno2(cacahuete) y alergeno3(pimiento);
+
 */
