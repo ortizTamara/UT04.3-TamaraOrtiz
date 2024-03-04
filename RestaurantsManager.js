@@ -27,6 +27,7 @@ import {
   CategoryNullException,
   DishNullException,
   DishAssignAllergenException,
+  DishAssignMenuException,
 } from "./Exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -187,7 +188,7 @@ class RestaurantsManager {
       if (position === -1) {
         this.#menus.push({
           menu,
-          dish: [],
+          dishes: [],
         });
         this.#menus.sort(this.#sortMenusFunc);
       } else {
@@ -355,7 +356,7 @@ class RestaurantsManager {
     for (const dish of dishes) {
       // Comprobamos si es nulo
       if (!(dish instanceof Dish)) {
-        throw new DishIsNull(dishes);
+        throw new DishIsNull(dish);
       }
       // Obtenemos la posición de platos
       let dishPosition = this.#getDishPosition(dish);
@@ -424,7 +425,7 @@ class RestaurantsManager {
         storedCategory.dishes.splice(dishPosition, 1);
       } else {
         // Si el plato no está en la categoría, lanza una excepción
-        throw new DishNotRegistred(dish);
+        throw new DishNotRegistred(dish, category);
       }
     }
     return this;
@@ -512,7 +513,7 @@ class RestaurantsManager {
     for (const allergen of allergens) {
       // Verificamos si alergeno es nula para no seguir avanzando
       if (!(allergen instanceof Allergen)) {
-        throw new AllergenIsNull(allergens);
+        throw new AllergenIsNull(allergen);
       }
 
       // Encontramos la posición del alergeno en la lista de platos.
@@ -526,7 +527,106 @@ class RestaurantsManager {
         storedAllergen.allergens.splice(allergenPosition, 1);
       } else {
         // Si el alergeno no está en el plato, lanza una excepción
-        throw new AllergenNotRegistred(allergen);
+        throw new DishAssignAllergenException(allergen, dish);
+      }
+    }
+    return this;
+  }
+
+  assignDishToMenu(menu, ...dishes) {
+    // Verificamos si menu existe
+    // Obtenemos la posición del menu
+    let menuPosition = this.#getMenuPosition(menu);
+
+    // Verificamos si el menu es nula para no seguir avanzando
+    if (!(menu instanceof Menu)) {
+      throw new MenuIsNull(menu);
+    }
+
+    //Y no existe, lo añadimos
+    if (menuPosition === -1) {
+      this.addMenu(menu);
+      menuPosition = this.#getMenuPosition(menu);
+    }
+
+    const storedMenu = this.#menus[menuPosition];
+
+    // Verificamos si Dish existe
+    // Recorremos los platos en la lista
+    for (const dish of dishes) {
+      // Comprobamos si es nulo
+      if (!(dish instanceof Dish)) {
+        throw new DishIsNull(dish);
+      }
+      // Obtenemos la posición de platos
+      let dishPosition = this.#getDishPosition(dish);
+
+      // Y si no existe, lo añadimos
+      if (dishPosition === -1) {
+        this.addDish(dish);
+        dishPosition = this.#getDishPosition(dish);
+      }
+
+      const storedDish = this.#dishes[dishPosition];
+
+      // Verificamos si el plato ya está asignado a la categoría
+      const dishInMenuPosition = this.#getDishPositionInMenu(
+        storedMenu.dishes,
+        storedDish.dish
+      );
+      // console.log(dishInMenuPosition);
+
+      // Si esta asignado, saltamos una excepción
+      if (dishInMenuPosition !== -1) {
+        throw new DishAssignMenuException(dishes, menu);
+      }
+
+      // Si no esta asignado, se le asigna al menu
+      storedMenu.dishes.push(storedDish.dish);
+    }
+    return this;
+  }
+
+  getMenu() {
+    return this.#menus;
+  }
+
+  #getDishPositionInMenu(dishes, dish) {
+    return dishes.findIndex((x) => x.name === dish.name);
+  }
+
+  deassignDishToMenu(menu, ...dishes) {
+    // Verificamos si el menu es nula para no seguir avanzando
+    if (!(menu instanceof Menu)) {
+      throw new MenuIsNull(menu);
+    }
+
+    // Buscamos el menu en la lista de menus registradas para obtener su posición.
+    let MenuPosition = this.#getMenuPosition(menu);
+    // Si el menu no está registrada, lanza una excepción.
+    if (MenuPosition === -1) {
+      throw new MenuNotRegistred(menu);
+    }
+
+    // Obtenemos el menu almacenada usando la posición encontrada.
+    const storedMenu = this.#menus[MenuPosition];
+
+    // Recorremos los platos en la lista
+    for (const dish of dishes) {
+      // Verificamos si plato es nula para no seguir avanzando
+      if (!(dish instanceof Dish)) {
+        throw new DishIsNull(dish);
+      }
+
+      // Encontramos la posición del plato en la lista de platos de la categoría.
+      let dishPosition = this.#getDishPositionInMenu(storedMenu.dishes, dish);
+      // console.log(dishInMenuPosition);
+      // Si el plato está en categoría, lo eliminamos de la lista de platos de esa categoría
+      if (dishPosition !== -1) {
+        storedMenu.dishes.splice(dishPosition, 1);
+      } else {
+        // Si el plato no está en el menu, lanza una excepción
+        throw new DishAssignMenuException(menu, dish);
       }
     }
     return this;
@@ -536,6 +636,7 @@ class RestaurantsManager {
 export { RestaurantsManager };
 
 /*
+
 Tenemos categoría:
 - Categoría5 Entrante -> Que tiene plato5 (Croquetas)
 - Categoría6 Comida -> Que tiene plato 6(tortilla) y 7 (Paella)
@@ -552,6 +653,10 @@ Tenemos plato:
 plato10 pizza -> Que tiene alergeno1(gluten)
 plato11 pollo cacahuete -> Que tiene alergeno2(cacahuete)y alergeno3(pimiento)
 
+
+Asignación plato a menus, vamos a hacer lo siguiente:
+Menu de la abuela va a tener -> plato5 (croquetas), plato6(tortilla) y plato8 (flan)
+Menu del día ->  plato7(paella) y plato8(Flan)
 
 
 

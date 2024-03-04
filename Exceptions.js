@@ -270,7 +270,7 @@ class RestaurantNotRegistred extends BaseException {
 class CategoryAssignDishException extends BaseException {
   constructor(category, dish, fileName, lineNumber) {
     super(
-      `Error al asignar ${category.name} a ${dish.name}: `,
+      `Error al asignar ${dish.name} a ${category.name}: `,
       fileName,
       lineNumber
     );
@@ -290,6 +290,7 @@ class CategoryNullException extends BaseException {
 class DishNullException extends BaseException {
   constructor(dish, fileName, lineNumber) {
     super(`El ${dish.name} proporcionado es null.`, fileName, lineNumber);
+
     this.name = "DishNullException";
   }
 }
@@ -303,6 +304,19 @@ class DishAssignAllergenException extends BaseException {
       lineNumber
     );
     this.name = "DishAssignAllergenException";
+  }
+}
+
+// Excepción al intentar asignar un plato a un menu
+class DishAssignMenuException extends BaseException {
+  constructor(menu, dish, fileName, lineNumber) {
+    super(
+      `Error al asignar ${dish.name} a ${menu.name}: `,
+      fileName,
+      lineNumber
+    );
+
+    this.name = "DishAssignMenuException";
   }
 }
 
@@ -335,4 +349,5 @@ export {
   CategoryNullException,
   DishNullException,
   DishAssignAllergenException,
+  DishAssignMenuException,
 };

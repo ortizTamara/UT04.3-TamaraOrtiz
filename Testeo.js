@@ -23,6 +23,11 @@ import {
   RestaurantExistsException,
   RestaurantIsNull,
   RestaurantNotRegistred,
+  CategoryAssignDishException,
+  CategoryNullException,
+  DishNullException,
+  DishAssignAllergenException,
+  DishAssignMenuException,
 } from "./Exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -876,7 +881,7 @@ function testeoAssignAndDesign() {
   console.log("Designando...");
   try {
     // console.log(manager.getCategories());
-    // manager.deassignCategoryToDish(category5, dish5);
+    manager.deassignCategoryToDish(category5, dish5);
     console.log(
       "Designación exitosa:",
       category5.name,
@@ -1158,6 +1163,159 @@ function testeoAssignAndDesign() {
   for (const allergen of manager.allergens) {
     console.log(allergen.toString());
   }
+
+  console.log("");
+  console.log("---------- TESTEO ASIGNACIÓN PLATO A MENU  ----------");
+
+  const menu1 = new Menu("Menú 1", "Menú especial del día");
+  const menu2 = new Menu("Menú 2", "Menú de la abuela");
+  const menu3 = new Menu("Menú 3", "Menú del finde");
+
+  // AÑADIMOS MENÚ
+  console.log("Añadiendo Menú");
+  console.log("Añadiendo menús al manager...");
+  console.log("menu1:", menu1);
+  console.log("menu2:", menu2);
+  try {
+    manager.addMenu(menu2);
+    console.log("Menú añadido con éxito");
+  } catch (error) {
+    console.error("Error al añadir menú:", error);
+  }
+
+  // Imprimimos los menús usando el ITERADOR
+  console.log("Iterador de Menús - Después de añadir");
+  for (const menu of manager.menus) {
+    console.log(menu.toString());
+  }
+
+  console.log("");
+  console.log("TEST 1: Asignando platos a menu");
+  try {
+    // console.log(manager.getMenu());
+    manager.assignDishToMenu(menu2, dish5, dish6, dish8);
+    console.log(
+      "Asignación exitosa:",
+      menu2.name,
+      "tiene",
+      dish5.name,
+      ",",
+      dish6.name,
+      "y",
+      dish8.name
+    );
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+
+  // Objeto Menu no existe, lo añadimos al sistema
+  console.log("");
+  console.log("TEST 2: Asignando plato a menu - menu no existe");
+  try {
+    manager.assignDishToMenu(menu1, dish7);
+    console.log("Asignación exitosa:", menu1.name, "tiene", dish7.name);
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+
+  // Objeto Category no existe, lo añadimos al sistema
+  console.log("");
+  console.log("TEST 3: Asignando plato a menu - plato no existe");
+  try {
+    manager.assignDishToMenu(menu1, dish8);
+    console.log("Asignación exitosa:", menu1.name, "tiene", dish8.name);
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  console.log("");
+  console.log("TEST 4: plato es null");
+  // ERROR: Dish es null
+  try {
+    manager.assignDishToMenu(menu1, null);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 5: menu es null");
+  // ERROR: Menu es null
+  try {
+    manager.assignDishToMenu(null, dish8);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("---------- TESTEO DESIGNACIÓN PLATO DE MENU  ----------");
+
+  console.log("TEST 6: Designar plato de menu");
+  console.log("Designando...");
+  try {
+    console.log(manager.getMenu());
+    manager.deassignDishToMenu(menu2, dish5);
+    console.log("Designación exitosa:", menu2.name, "ya no tiene", dish5.name);
+  } catch (error) {
+    console.error("Error en la Designación:", error);
+  }
+
+  console.log("");
+  console.log("TEST 7: Designar plato de menu");
+  console.log("Designando...");
+  try {
+    manager.deassignDishToMenu(menu1, dish8);
+    console.log("Designación exitosa:", menu1.name, "ya no tiene", dish8.name);
+  } catch (error) {
+    console.error("Error en la Designación:", error);
+  }
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  console.log("");
+  console.log("TEST 8: Menu no esta registrada");
+  // ERROR: Menu no registrada
+  try {
+    manager.deassignDishToMenu(menu3, dish7);
+    console.log("Designación exitosa:", menu3.name, "ya no tiene", dish7.name);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 9: Plato no esta registrada");
+  // ERROR: Plato no registrado
+  try {
+    manager.deassignDishToMenu(menu1, dish8);
+    console.log("Designación exitosa:", menu1.name, "ya no tiene", dish8.name);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 10: Menu es null");
+  try {
+    manager.deassignDishToMenu(null, dish6);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 11: plato es null");
+  try {
+    manager.deassignDishToMenu(menu1, null);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 12: Plato no esta asignado al menu");
+  // ERROR: Designación de plato erroneo, es decir, que no esta en ese menu.
+  try {
+    manager.deassignDishToMenu(menu1, dish6);
+    console.log("Designación exitosa:", menu1.name, "ya no tiene", dish6.name);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 testeoDish();
@@ -1171,5 +1329,9 @@ testeoAssignAndDesign();
 Asignar platos directamente a categorías y menús, y asignar alérgenos directamente a platos. 
 - Cada plato sabe exactamente en qué categoría o categorías se encuentra y que alérgenos tiene.  
 - Cada menú conoce los platos que contiene.
+
+
+
+
 
 */
