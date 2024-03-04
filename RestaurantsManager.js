@@ -373,6 +373,7 @@ class RestaurantsManager {
         storedCategory.dishes,
         storedDish.dish
       );
+      // console.log(dishPosition);
 
       // Si esta asignado, saltamos una excepción
       if (dishInCategoryPosition !== -1) {
@@ -426,11 +427,12 @@ class RestaurantsManager {
         throw new DishNotRegistred(dish);
       }
     }
+    return this;
   }
 
-  // getCategories() {
-  //   return this.#categories;
-  // }
+  getCategories() {
+    return this.#categories;
+  }
 
   assignAllergenToDish(dish, ...allergens) {
     let dishPosition = this.#getDishPosition(dish);
@@ -450,7 +452,7 @@ class RestaurantsManager {
     for (const allergen of allergens) {
       // Comprobamos si el alérgeno es nulo
       if (!(allergen instanceof Allergen)) {
-        throw new AllergenIsNull(allergen);
+        throw new AllergenIsNull(allergens);
       }
 
       //Obtenemos la posición de los alergenos
@@ -467,10 +469,10 @@ class RestaurantsManager {
       // Verificamos si el alérgeno ya está asignado al plato
       const allergenInDishPosition = this.#getAllergenPositionInDish(
         storedDish.allergens,
-        storedAllergen.allergen
+        storedAllergen
       );
 
-      console.log(allergenInDishPosition);
+      // console.log(allergenInDishPosition);
 
       if (allergenInDishPosition !== -1) {
         throw new DishAssignAllergenException(allergens, dish);
@@ -489,6 +491,46 @@ class RestaurantsManager {
   getDish() {
     return this.#dishes;
   }
+
+  deassignAllergenToDish(dish, ...allergens) {
+    // Verificamos si el plato es nula para no seguir avanzando
+    if (!(dish instanceof Dish)) {
+      throw new DishIsNull(dish);
+    }
+
+    // Buscamos el plato en la lista de platos registradas para obtener su posición.
+    let dishPosition = this.#getDishPosition(dish);
+    // Si el plato no está registrada, lanza una excepción.
+    if (dishPosition === -1) {
+      throw new DishNotRegistred(dish);
+    }
+
+    // Obtenemos la categoría almacenada usando la posición encontrada.
+    const storedAllergen = this.#dishes[dishPosition];
+
+    // Recorremos los aleregnos en la lista
+    for (const allergen of allergens) {
+      // Verificamos si alergeno es nula para no seguir avanzando
+      if (!(allergen instanceof Allergen)) {
+        throw new AllergenIsNull(allergens);
+      }
+
+      // Encontramos la posición del alergeno en la lista de platos.
+      let allergenPosition = this.#getAllergenPositionInDish(
+        storedAllergen.allergens,
+        allergen
+      );
+      // console.log(allergenPosition);
+      // Si el alergeno está en plato, lo eliminamos de la lista de platos de esa categoría
+      if (allergenPosition !== -1) {
+        storedAllergen.allergens.splice(allergenPosition, 1);
+      } else {
+        // Si el alergeno no está en el plato, lanza una excepción
+        throw new AllergenNotRegistred(allergen);
+      }
+    }
+    return this;
+  }
 }
 
 export { RestaurantsManager };
@@ -497,8 +539,9 @@ export { RestaurantsManager };
 Tenemos categoría:
 - Categoría5 Entrante -> Que tiene plato5 (Croquetas)
 - Categoría6 Comida -> Que tiene plato 6(tortilla) y 7 (Paella)
-- Categoría7 Postre -> Que tiene plato8(Flan)
-- Categoría8 Cena -> Que tiene plato9 (Pisto)
+- Categoría7 Postre -> Que tiene plato8(Flan) (Lo tengo en prueba error)
+- Categoría8 Cena -> Que tiene plato9 (Pisto) (lo tengo en prueba error)
+
 Categoría 5 añadida
 Plato5 y plato6 añadido
 category6 añadido al sistema
@@ -507,7 +550,9 @@ Categoría7 Añadido al sistema
 
 Tenemos plato:
 plato10 pizza -> Que tiene alergeno1(gluten)
-plato11 pollo cacahuete -> Que tiene alergeno2(cacahuete)
-plato12 Pad Thai -> Que tiene alergeno2(cacahuete) y alergeno3(pimiento);
+plato11 pollo cacahuete -> Que tiene alergeno2(cacahuete)y alergeno3(pimiento)
+
+
+
 
 */

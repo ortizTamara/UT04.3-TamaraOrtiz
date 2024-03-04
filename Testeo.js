@@ -812,6 +812,7 @@ function testeoAssignAndDesign() {
   console.log("");
   console.log("TEST 1: Asignando plato a categoría");
   try {
+    // console.log(manager.getCategories());
     manager.assignCategoryToDish(category5, dish5);
     console.log("Asignación exitosa:", category5.name, "tiene", dish5.name);
   } catch (error) {
@@ -822,6 +823,7 @@ function testeoAssignAndDesign() {
   console.log("");
   console.log("TEST 2: Asignando plato a categoría - Categoría no existe");
   try {
+    // console.log(manager.getCategories());
     manager.assignCategoryToDish(category6, dish6);
     console.log("Asignación exitosa:", category6.name, "tiene", dish6.name);
   } catch (error) {
@@ -837,6 +839,7 @@ function testeoAssignAndDesign() {
   console.log("");
   console.log("TEST 3: Asignando plato a categoría - Plato no existe");
   try {
+    // console.log(manager.getCategories());
     manager.assignCategoryToDish(category6, dish7);
     console.log("Asignación exitosa:", category6.name, "tiene", dish7.name);
   } catch (error) {
@@ -873,7 +876,7 @@ function testeoAssignAndDesign() {
   console.log("Designando...");
   try {
     // console.log(manager.getCategories());
-    manager.deassignCategoryToDish(category5, dish5);
+    // manager.deassignCategoryToDish(category5, dish5);
     console.log(
       "Designación exitosa:",
       category5.name,
@@ -888,13 +891,13 @@ function testeoAssignAndDesign() {
   console.log("TEST 6: Designar plato de categoría");
   console.log("Designando...");
   try {
-    // console.log(manager.getCategories());
+    console.log(manager.getCategories());
     manager.deassignCategoryToDish(category6, dish6);
     console.log(
       "Designación exitosa:",
-      category5.name,
+      category6.name,
       "ya no tiene",
-      dish5.name
+      dish6.name
     );
   } catch (error) {
     console.error("Error en la Designación:", error);
@@ -981,13 +984,11 @@ function testeoAssignAndDesign() {
 
   console.log("Añadiendo alergenos...");
   try {
-    console.log(manager.getDish());
     manager.addAllergen(allergen1, allergen2);
     console.log("Alergenos añadido con éxito");
   } catch (error) {
     console.error("Error al añadir alergeno:", error);
   }
-
   // Imprimimos los menús usando el ITERADOR
   console.log("Iterador de Allergen - Después de añadir: ");
   for (const allergen of manager.allergens) {
@@ -995,9 +996,9 @@ function testeoAssignAndDesign() {
   }
 
   console.log("");
-  console.log("TEST 10: Asignando alergeno a plato");
+  console.log("TEST 1: Asignando alergeno a plato");
   try {
-    console.log(manager.getDish());
+    // console.log(manager.getDish());
     manager.assignAllergenToDish(dish10, allergen1);
     console.log("Asignación exitosa:", allergen1.name, "->", dish10.name);
   } catch (error) {
@@ -1006,9 +1007,9 @@ function testeoAssignAndDesign() {
 
   // Objeto Category no existe, lo añadimos al sistema
   console.log("");
-  console.log("TEST 11: Asignando alergeno a plato - plato no existe");
+  console.log("TEST 2: Asignando alergeno a plato - plato no existe");
   try {
-    console.log(manager.getDish());
+    // console.log(manager.getDish());
     manager.assignAllergenToDish(dish11, allergen2);
     console.log(
       "Asignación exitosa:",
@@ -1021,12 +1022,11 @@ function testeoAssignAndDesign() {
   }
 
   // Objeto Dish no existe, lo añadimos al sistema
-  // PROBLEMA: CREO QUE NO ME DEJA AÑADIR OTRO ALERJENO SI YA HAY UNO
   console.log("");
-  console.log("TEST 12: Asignando alergeno a plato - alergeno no existe");
+  console.log("TEST 3: Asignando alergeno a plato - alergeno no existe");
   try {
-    console.log(manager.getDish());
-    manager.assignAllergenToDish(dish10, allergen3);
+    // console.log(manager.getDish());
+    manager.assignAllergenToDish(dish11, allergen3);
     console.log(
       "Asignación exitosa:",
       dish11.name,
@@ -1041,19 +1041,123 @@ function testeoAssignAndDesign() {
   console.log("");
   console.log("TEST 4: alergeno es null");
   // ERROR: Category es null
-  // try {
-  //   manager.assignAllergenToDish(dish11, null);
-  // } catch (error) {
-  //   console.error(error);
-  // }
+  try {
+    manager.assignAllergenToDish(dish11, null);
+  } catch (error) {
+    console.error(error);
+  }
 
   console.log("");
   console.log("TEST 5: plato es null");
-  // try {
-  //   manager.assignAllergenToDish(null, allergen3);
-  // } catch (error) {
-  //   console.error(error);
-  // }
+  try {
+    manager.assignAllergenToDish(null, allergen3);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("---------- TESTEO DESIGNACIÓN ALERGENO DE PLATO  ----------");
+  console.log("TEST 6: Designar alergeno de plato");
+  console.log("Designando...");
+  try {
+    console.log(manager.getDish());
+    manager.deassignAllergenToDish(dish10, allergen1);
+    console.log(
+      "Designación exitosa:",
+      dish10.name,
+      "ya no tiene",
+      allergen1.name
+    );
+  } catch (error) {
+    console.error("Error en la Designación:", error);
+  }
+
+  console.log("");
+  console.log("TEST 7: Designar alergeno de plato");
+  console.log("Designando...");
+  try {
+    // console.log(manager.getCategories());
+    manager.deassignAllergenToDish(dish11, allergen3);
+    console.log(
+      "Designación exitosa:",
+      dish11.name,
+      "ya no tiene",
+      allergen3.name
+    );
+  } catch (error) {
+    console.error("Error en la Designación:", error);
+  }
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  console.log("");
+  console.log("TEST 8: plato es null");
+  try {
+    manager.deassignAllergenToDish(null, allergen2);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 9: Plato no esta registrada");
+  // ERROR: plato no registrada
+  try {
+    manager.deassignAllergenToDish(dish9, allergen2);
+    console.log(
+      "Designación exitosa:",
+      dish9.name,
+      "ya no tiene",
+      allergen2.name
+    );
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 10: Alergeno es nulo");
+  // ERROR: alergeno es null
+  try {
+    manager.deassignAllergenToDish(dish11, null);
+    // console.log("Designación exitosa:", dish11.name, "ya no tiene", category7.name);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 11: Alergeno no esta registrada");
+  // ERROR: alergeno no registrado
+  try {
+    manager.deassignAllergenToDish(dish11, allergen3);
+    console.log(
+      "Designación exitosa:",
+      dish11.name,
+      "ya no tiene",
+      allergen3.name
+    );
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 12: Alergeno no esta asignado a ese plato");
+  // ERROR: Designación de alergeno erroneo, es decir, que no esta en esa categoría.
+  try {
+    manager.deassignAllergenToDish(dish10, allergen2);
+    console.log(
+      "Designación exitosa:",
+      dish10.name,
+      "ya no tiene",
+      allergen2.name
+    );
+  } catch (error) {
+    console.error(error);
+  }
+
+  // Comprobamos el Iterador de Alergenos
+  console.log("");
+  console.log("Iterador de Alergenos - Comprobación después de excepción:");
+  for (const allergen of manager.allergens) {
+    console.log(allergen.toString());
+  }
 }
 
 testeoDish();
@@ -1067,4 +1171,5 @@ testeoAssignAndDesign();
 Asignar platos directamente a categorías y menús, y asignar alérgenos directamente a platos. 
 - Cada plato sabe exactamente en qué categoría o categorías se encuentra y que alérgenos tiene.  
 - Cada menú conoce los platos que contiene.
+
 */
