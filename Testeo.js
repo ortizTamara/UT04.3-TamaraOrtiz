@@ -1318,7 +1318,7 @@ function testeoAssignAndDesign() {
   }
 
   console.log("");
-  console.log("---------- TESTEO DESIGNACIÓN PLATO DE MENU  ----------");
+  console.log("---------- TESTEO INTERCAMBIO DE POSICIONES  ----------");
   console.log(manager.getMenu());
 
   console.log("");
@@ -1380,7 +1380,26 @@ function testeoAssignAndDesign() {
     console.error(error);
   }
 
-  // ME FALTA DISH NO ESTÁ ASIGNADO EN EL MENÚ
+  const dish13 = new Dish(
+    "Albondigas",
+    "PLato de albondigas de la abuela",
+    ["Carne picada", "Huevo", "Pan Rallado", "Perejil"],
+    "albondigas1.jpg"
+  );
+  try {
+    manager.addDish(dish13);
+    console.log(dish13, "añadido con éxito");
+  } catch (error) {
+    console.error("Error al añadir Plato:", error);
+  }
+
+  console.log("");
+  console.log("TEST 5: Plato no está asignado en el menú");
+  try {
+    manager.changeDishesPositionsInMenu(menu2, dish13, dish8);
+  } catch (error) {
+    console.error(error);
+  }
 
   console.log("");
   console.log("---------- TESTEO ITERADOR PLATOS A UNA CATEGORÍA  ----------");
@@ -1394,8 +1413,26 @@ function testeoAssignAndDesign() {
     console.error("Error en la asignación:", error);
   }
 
+  try {
+    // console.log(manager.getCategories());
+    manager.assignCategoryToDish(category5, dish5);
+    console.log("Asignación exitosa:", category5.name, "tiene", dish5.name);
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+
   console.log("");
-  console.log("TEST 1: Iterador con la relación de los platos a categoría");
+  console.log("TEST 1: Iterador con la relación de los platos a categoría5");
+  try {
+    for (const dish of manager.getDishesInCategory(category5)) {
+      console.log(dish.toString());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 2: Iterador con la relación de los platos a categoría6");
   try {
     for (const dish of manager.getDishesInCategory(category6)) {
       console.log(dish.toString());
@@ -1405,7 +1442,7 @@ function testeoAssignAndDesign() {
   }
 
   console.log("");
-  console.log("TEST 2: Categoría no esta registrada");
+  console.log("TEST 3: Categoría no esta registrada");
   try {
     const category10 = new Category("Almuerzo", "Categoría para Almuerzo");
     for (const dish of manager.getDishesInCategory(category10)) {
@@ -1416,10 +1453,123 @@ function testeoAssignAndDesign() {
   }
 
   console.log("");
-  console.log("TEST 3: Categoría es nula");
+  console.log("TEST 4: Categoría es nula");
   try {
     for (const dish of manager.getDishesInCategory(null)) {
       console.log(dish.toString());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("---------- TESTEO ITERADOR PLATOS CON UN ALÉRGENO ----------");
+  console.log(manager.getDish());
+  const dish12 = new Dish(
+    "Pad Thai",
+    "Plato de fideos tailandés salteados con camarones, tofu, cacahuetes y brotes de soja",
+    [
+      "Fideos de arroz",
+      "Tofu",
+      "Cacahuetes triturados",
+      "Brotes de soja",
+      "Huevo",
+      "Lima",
+      "Salsa de tamarindo",
+    ],
+    "pad-thai.jpg"
+  );
+
+  try {
+    // console.log(manager.getDish());
+    manager.assignAllergenToDish(dish12, allergen2);
+    console.log(
+      "Asignación exitosa:",
+      dish12.name,
+      "contiene alergeno:",
+      allergen2.name
+    );
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+
+  try {
+    // console.log(manager.getDish());
+    manager.assignAllergenToDish(dish10, allergen1);
+    console.log(
+      "Asignación exitosa:",
+      dish10.name,
+      "contiene alergeno:",
+      allergen1.name
+    );
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+
+  console.log("");
+  console.log("TEST 1: Iterador con platos que contienen allergen1");
+  try {
+    for (const item of manager.getDishesWithAllergen(allergen3)) {
+      console.log(item.dish.toString());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 2: Iterador con platos que contienen allergen2");
+  try {
+    for (const item of manager.getDishesWithAllergen(allergen2)) {
+      console.log(item.dish.toString());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 3: Alergeno no esta registrada");
+  try {
+    const allergen3 = new Allergen("Frutos Secos", "Contiene frutos secos");
+    for (const dish of manager.getDishesWithAllergen(allergen3)) {
+      console.log(dish.toString());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 4: alergeno es nula");
+  try {
+    for (const dish of manager.getDishesWithAllergen(null)) {
+      console.log(dish.toString());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("---------- TESTEO ITERADOR CALLBACK  ----------");
+
+  const dish14 = new Dish(
+    "Pasta",
+    "Pasta boloñesa",
+    ["harina", "tomate", "carne molida"],
+    "pasta.jpg"
+  );
+  try {
+    manager.addDish(dish14);
+    console.log("Añadido con éxito:", dish14.toString());
+  } catch (error) {
+    console.error("Error al añadir Plato:", error);
+  }
+
+  console.log("");
+  console.log("TEST 1: Verificamos el filtrado correcto");
+  try {
+    for (const dish of manager.findDishes((dish) =>
+      dish.ingredients.includes("tomate")
+    )) {
+      console.log(dish.name);
     }
   } catch (error) {
     console.error(error);

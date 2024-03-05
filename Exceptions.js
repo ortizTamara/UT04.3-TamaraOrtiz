@@ -320,6 +320,19 @@ class DishAssignMenuException extends BaseException {
   }
 }
 
+// Excepción para argumentos que deberían ser funciones pero no lo son
+class NotAFunctionException extends BaseException {
+  constructor(argumentName, fileName, lineNumber) {
+    super(
+      `Error: El argumento "${argumentName}" debe ser una función.`,
+      fileName,
+      lineNumber
+    );
+    this.argumentName = argumentName;
+    this.name = "NotAFunctionException";
+  }
+}
+
 export {
   BaseException,
   InvalidAccessConstructorException,
@@ -350,4 +363,5 @@ export {
   DishNullException,
   DishAssignAllergenException,
   DishAssignMenuException,
+  NotAFunctionException,
 };

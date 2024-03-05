@@ -28,6 +28,7 @@ import {
   DishNullException,
   DishAssignAllergenException,
   DishAssignMenuException,
+  NotAFunctionException,
 } from "./Exceptions.js";
 
 import { Dish } from "./dish.js";
@@ -673,21 +674,100 @@ class RestaurantsManager {
     return this;
   }
 
-  getDishesInCategory(category) {
+  getDishesInCategory(category, func = null) {
+    // Comprobamos que category no sea nulo
     if (!category || !(category instanceof Category)) {
       throw new CategoryIsNull(category);
     }
 
+    // Buscamos la posición de la categoría
     const categoryPosition = this.#getCategoryPosition(category);
     if (categoryPosition === -1) {
       throw new CategoryNotRegistred(category);
     }
 
-    const dishesInCategory = this.#categories[categoryPosition].dishes;
+    // Obtenemos los platos de la categoría especificada
+    let dishesInCategory = this.#categories[categoryPosition].dishes;
+
+    // Si se proporciona una función, la aplica a cada plato
+    if (func && typeof func === "function") {
+      dishesInCategory = dishesInCategory.filter((dish) => func(dish));
+    }
+
+    // Iterador de platos
     return {
       *[Symbol.iterator]() {
         for (let dish of dishesInCategory) {
           yield dish;
+        }
+      },
+    };
+  }
+  getDishesWithAllergen(allergen, func = null) {
+    // Comprobamos que alergeno no sea nulo
+    if (!allergen || !(allergen instanceof Allergen)) {
+      throw new AllergenIsNull(allergen);
+    }
+
+    // Verificamos si el alérgeno está registrado
+    const allergenPosition = this.#getAllergenPosition(allergen);
+    if (allergenPosition === -1) {
+      throw new AllergenNotRegistred(allergen);
+    }
+
+    // Obtenemos los platos que contienen el alérgeno especificado
+    let dishesWithAllergen = this.#dishes.filter((dish) =>
+      dish.allergens.some((a) => a.name === allergen.name)
+    );
+
+    // Si se proporciona una función, se aplica a los platos filtrados
+    if (func && typeof func === "function") {
+      dishesWithAllergen = dishesWithAllergen.filter((dish) => func(dish));
+    }
+
+    // Iterador
+    return {
+      *[Symbol.iterator]() {
+        for (let dish of dishesWithAllergen) {
+          yield dish;
+        }
+      },
+    };
+  }
+
+  //CriteriaFunc -> Determinamos si un plato cumple con un cretirio específico
+  //TransformFunc -> Aplica transformaciones/acciones sobre los platos que pasan el filtro.
+  findDishes(dish, criteriaFunc, actionFunc = null) {
+    // Verificar que el primer argumento sea un Dish
+    if (!(dish instanceof Dish)) {
+      throw new DishIsNull(dish);
+    }
+
+    // Verificamos que el segundo argumento sea una función
+    if (typeof criteriaFunc !== "function") {
+      throw new NotAFunctionException(criteriaFunc);
+    }
+
+    // Verificamos que el tercer argumento, si se proporciona, sea una función
+    if (actionFunc !== null && typeof actionFunc !== "function") {
+      throw new NotAFunctionException(actionFunc);
+    }
+
+    // Filtramos los platos que cumplen con el criterio especificado por criteriaFunc
+    let foundDishes = this.#dishes.filter((dishItem) =>
+      criteriaFunc(dishItem, dish)
+    );
+
+    // Si se ha proporcionado una función de acción, la aplica a cada plato encontrado
+    if (actionFunc !== null) {
+      foundDishes.forEach((dishItem) => actionFunc(dishItem));
+    }
+
+    //ITERADOR
+    return {
+      *[Symbol.iterator]() {
+        for (let dishItem of foundDishes) {
+          yield dishItem;
         }
       },
     };
@@ -719,6 +799,18 @@ Asignación plato a menus, vamos a hacer lo siguiente:
 Menu de la abuela va a tener -> plato5 (croquetas), plato6(tortilla) y plato8 (flan)
 Menu del día ->  plato7(paella) y plato8(Flan)
 
+  const dish9 = new Dish(
+    "Pisto",
+    "Un guiso tradicional de verduras",
+    ["tomate", "pimiento", "calabacín", "cebolla", "ajo", "sal"],
+    "pisto1.jpg"
+  );
 
-
+ try {
+    manager.addDish(dish5, dish6);
+    console.log("Añadido con éxito:", dish5.toString());
+    console.log("Añadido con éxito:", dish6.toString());
+  } catch (error) {
+    console.error("Error al añadir Plato:", error);
+  }
 */
