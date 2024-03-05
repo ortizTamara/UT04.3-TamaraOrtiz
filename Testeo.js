@@ -1547,42 +1547,26 @@ function testeoAssignAndDesign() {
     console.error(error);
   }
 
-  // console.log("");
-  // console.log("---------- TESTEO ITERADOR CALLBACK  ----------");
-
-  // const dish14 = new Dish(
-  //   "Pasta",
-  //   "Pasta boloñesa",
-  //   ["pasta", "tomate", "carne molida"],
-  //   "pasta.jpg"
-  // );
-  // try {
-  //   manager.addDish(dish14);
-  //   console.log("Añadido con éxito:", dish14.toString());
-  // } catch (error) {
-  //   console.error("Error al añadir Plato:", error);
-  // }
-
-  // console.log(
-  //   "TEST 1: Buscar platos que contienen 'huevo' y listarlos ordenados por nombre"
-  // );
+  console.log("");
+  console.log("---------- TESTEO ITERADOR CALLBACK  ----------");
+  try {
+    // Asumiendo que manager es una instancia de RestaurantsManager con platos ya añadidos
+    console.log("Test 1: Filtrado Correcto");
+    const iterador = manager.findDishes(
+      (dish) => dish.ingredients.includes("pollo"),
+      (a, b) => a.name.localeCompare(b.name)
+    );
+    for (const dish of iterador) {
+      console.log(dish.toString()); // Verificar que los platos tienen "pollo" en sus ingredientes
+    }
+  } catch (error) {
+    console.error("Test 1 falló:", error.message);
+  }
 
   console.log("");
   console.log("---------- TESTEO CREACIÓN DE PLATOS ----------");
 
-  // Intentar crear un plato nuevo
-  console.log("TEST 1: Crear un plato nuevo");
-  try {
-    const dish1 = manager.createDish(
-      "Gazpacho",
-      "Sopa fría de tomate",
-      ["tomate", "pepino", "pimiento"],
-      "gazpacho.jpg"
-    );
-    console.log("Plato creado exitosamente:", dish1.toString());
-  } catch (error) {
-    console.error(error);
-  }
+  // FALTA POR TESTEAR FINDDISHES
 
   // Intentar crear un plato que ya existe
   console.log("");

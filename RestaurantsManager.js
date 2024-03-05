@@ -735,28 +735,25 @@ class RestaurantsManager {
     };
   }
 
-  // NO FUNCIONA, REVISAR
-  //CriteriaFunc -> Determinamos si un plato cumple con un cretirio específico
-  //TransformFunc -> Aplica transformaciones/acciones sobre los platos que pasan el filtro.
-  findDishes(criteriaFunc, sortFunc = null) {
-    // Verificar que criteriaFunc es una función
-    if (typeof criteriaFunc !== "function") {
-      throw new Error("El primer argumento debe ser una función");
-    }
+  // NO LO ENTIENDO
+  // Método para buscar platos con un callback y un orden dado
+  findDishes(dish, callback, order) {
+    // Obtenemos la posición del plato en el arreglo
+    let posDish = this.#getDishPosition(dish);
 
-    // Filtrar los platos que cumplen con el criterio
-    let filteredDishes = this.#dishes.filter((dish) => criteriaFunc(dish));
+    // Validamos la existencia del plato
+    if (typeof dish === null || posDish === -1)
+      throw new DishNotRegistred("dish", dish);
 
-    // Si se proporciona una función de ordenamiento, aplicarla
-    if (sortFunc && typeof sortFunc === "function") {
-      filteredDishes.sort(sortFunc);
-    }
+    // Creamos una copia del arreglo de platos filtrados y ordenarla
+    let array = [...this.#dishes.filter(callback)];
+    array.sort(order);
 
-    // Devolver los platos filtrados como un iterador
+    // Devolvemos un iterable para los platos ordenados
     return {
       *[Symbol.iterator]() {
-        for (let dish of filteredDishes) {
-          yield dish;
+        for (let i = 0; i < array.length; i++) {
+          yield array[i];
         }
       },
     };
