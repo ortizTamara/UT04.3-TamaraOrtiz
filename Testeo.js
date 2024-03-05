@@ -1549,24 +1549,10 @@ function testeoAssignAndDesign() {
 
   console.log("");
   console.log("---------- TESTEO ITERADOR CALLBACK  ----------");
-  try {
-    // Asumiendo que manager es una instancia de RestaurantsManager con platos ya añadidos
-    console.log("Test 1: Filtrado Correcto");
-    const iterador = manager.findDishes(
-      (dish) => dish.ingredients.includes("pollo"),
-      (a, b) => a.name.localeCompare(b.name)
-    );
-    for (const dish of iterador) {
-      console.log(dish.toString()); // Verificar que los platos tienen "pollo" en sus ingredientes
-    }
-  } catch (error) {
-    console.error("Test 1 falló:", error.message);
-  }
+  // FALTA POR TESTEAR FINDDISHES
 
   console.log("");
   console.log("---------- TESTEO CREACIÓN DE PLATOS ----------");
-
-  // FALTA POR TESTEAR FINDDISHES
 
   // Intentar crear un plato que ya existe
   console.log("");
