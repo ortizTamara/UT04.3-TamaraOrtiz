@@ -1547,30 +1547,139 @@ function testeoAssignAndDesign() {
     console.error(error);
   }
 
-  console.log("");
-  console.log("---------- TESTEO ITERADOR CALLBACK  ----------");
+  // console.log("");
+  // console.log("---------- TESTEO ITERADOR CALLBACK  ----------");
 
-  const dish14 = new Dish(
-    "Pasta",
-    "Pasta boloñesa",
-    ["harina", "tomate", "carne molida"],
-    "pasta.jpg"
-  );
+  // const dish14 = new Dish(
+  //   "Pasta",
+  //   "Pasta boloñesa",
+  //   ["pasta", "tomate", "carne molida"],
+  //   "pasta.jpg"
+  // );
+  // try {
+  //   manager.addDish(dish14);
+  //   console.log("Añadido con éxito:", dish14.toString());
+  // } catch (error) {
+  //   console.error("Error al añadir Plato:", error);
+  // }
+
+  // console.log(
+  //   "TEST 1: Buscar platos que contienen 'huevo' y listarlos ordenados por nombre"
+  // );
+
+  console.log("");
+  console.log("---------- TESTEO CREACIÓN DE PLATOS ----------");
+
+  // Intentar crear un plato nuevo
+  console.log("TEST 1: Crear un plato nuevo");
   try {
-    manager.addDish(dish14);
-    console.log("Añadido con éxito:", dish14.toString());
+    const dish1 = manager.createDish(
+      "Gazpacho",
+      "Sopa fría de tomate",
+      ["tomate", "pepino", "pimiento"],
+      "gazpacho.jpg"
+    );
+    console.log("Plato creado exitosamente:", dish1.toString());
   } catch (error) {
-    console.error("Error al añadir Plato:", error);
+    console.error(error);
+  }
+
+  // Intentar crear un plato que ya existe
+  console.log("");
+  console.log("TEST 2: Intentar crear un plato que ya existe");
+  try {
+    const dish15 = manager.createDish(
+      "Gazpacho",
+      "Sopa fría de tomate",
+      ["tomate", "pepino", "pimiento"],
+      "gazpacho.jpg"
+    );
+    console.log("Manejo correcto de plato duplicado. Plato existente:");
+    console.log(dish15.toString());
+  } catch (error) {
+    console.error(error);
   }
 
   console.log("");
-  console.log("TEST 1: Verificamos el filtrado correcto");
+  console.log("---------- TESTEO CREACIÓN DE MENUS ----------");
+  console.log("TEST 1: Crear un menú nuevo");
   try {
-    for (const dish of manager.findDishes((dish) =>
-      dish.ingredients.includes("tomate")
-    )) {
-      console.log(dish.name);
-    }
+    const menu5 = manager.createMenu(
+      "Menú Primavera",
+      "Una selección de platos ligeros para la primavera"
+    );
+    console.log(menu5.toString());
+  } catch (error) {
+    console.error("Error al crear el menú:", error);
+  }
+
+  console.log("");
+  console.log("TEST 2: Intentar crear un menú que ya existe");
+  try {
+    const menu5 = manager.createMenu(
+      "Menú Primavera",
+      "Una selección de platos ligeros para la primavera"
+    );
+    console.log("Se ha devuelto el menú existente:");
+    console.log(menu5.toString());
+  } catch (error) {
+    console.error(error);
+  }
+  console.log("");
+  console.log("---------- TESTEO CREACIÓN DE ALERGENOS ----------");
+  console.log("TEST 1: Crear un alérgeno nuevo");
+  try {
+    const allergen4 = manager.createAllergen(
+      "Pescado",
+      "Alergía a todos tipos de pescados"
+    );
+    console.log(allergen4.toString());
+  } catch (error) {
+    console.error("Error al crear el alérgeno:", error);
+  }
+
+  console.log("");
+  console.log("TEST 2: Intentar crear un alérgeno que ya existe");
+  try {
+    const allergen4 = manager.createAllergen(
+      "Pescado",
+      "Alergía a todos tipos de pescados"
+    );
+    console.log("Se ha devuelto el alérgeno existente:");
+    console.log(allergen4.toString());
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("---------- TESTEO CREACIÓN DE RESTAURANTE ----------");
+
+  console.log("");
+  console.log("TEST 1: Crear un restaurante nuevo");
+  const location3 = new Coordinate(38.9861, -3.927);
+  try {
+    const restaurant5 = manager.createRestaurant(
+      "Doña Croqueta",
+      "Todo tipo de croquetas",
+      location3
+    );
+    console.log(restaurant5.toString());
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 2: Intentar crear un restaurante que ya existe");
+  try {
+    const restaurant5 = manager.createRestaurant(
+      "Doña Croqueta",
+      "Todo tipo de croquetas",
+      location3
+    );
+    console.log(
+      "Se ha devuelto el restaurante existente:",
+      restaurant5.toString()
+    );
   } catch (error) {
     console.error(error);
   }

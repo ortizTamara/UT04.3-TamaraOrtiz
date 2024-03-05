@@ -735,42 +735,107 @@ class RestaurantsManager {
     };
   }
 
+  // NO FUNCIONA, REVISAR
   //CriteriaFunc -> Determinamos si un plato cumple con un cretirio específico
   //TransformFunc -> Aplica transformaciones/acciones sobre los platos que pasan el filtro.
-  findDishes(dish, criteriaFunc, actionFunc = null) {
-    // Verificar que el primer argumento sea un Dish
-    if (!(dish instanceof Dish)) {
-      throw new DishIsNull(dish);
-    }
-
-    // Verificamos que el segundo argumento sea una función
+  findDishes(criteriaFunc, sortFunc = null) {
+    // Verificar que criteriaFunc es una función
     if (typeof criteriaFunc !== "function") {
-      throw new NotAFunctionException(criteriaFunc);
+      throw new Error("El primer argumento debe ser una función");
     }
 
-    // Verificamos que el tercer argumento, si se proporciona, sea una función
-    if (actionFunc !== null && typeof actionFunc !== "function") {
-      throw new NotAFunctionException(actionFunc);
+    // Filtrar los platos que cumplen con el criterio
+    let filteredDishes = this.#dishes.filter((dish) => criteriaFunc(dish));
+
+    // Si se proporciona una función de ordenamiento, aplicarla
+    if (sortFunc && typeof sortFunc === "function") {
+      filteredDishes.sort(sortFunc);
     }
 
-    // Filtramos los platos que cumplen con el criterio especificado por criteriaFunc
-    let foundDishes = this.#dishes.filter((dishItem) =>
-      criteriaFunc(dishItem, dish)
-    );
-
-    // Si se ha proporcionado una función de acción, la aplica a cada plato encontrado
-    if (actionFunc !== null) {
-      foundDishes.forEach((dishItem) => actionFunc(dishItem));
-    }
-
-    //ITERADOR
+    // Devolver los platos filtrados como un iterador
     return {
       *[Symbol.iterator]() {
-        for (let dishItem of foundDishes) {
-          yield dishItem;
+        for (let dish of filteredDishes) {
+          yield dish;
         }
       },
     };
+  }
+
+  createDish(name, description, ingredients, image) {
+    // Verificamos si el plato ya existe
+    const existingDish = this.#dishes.find((dish) => dish.name === name);
+    if (existingDish) {
+      // Devolvemos el plato existente para evitar duplicados
+      console.log(
+        `El plato ${name} ya existe. Retornando el plato existente...`
+      );
+      return existingDish;
+    } else {
+      // Crear un nuevo plato si no existe
+      const newDish = new Dish(name, description, ingredients, image);
+      this.#dishes.push(newDish);
+      // console.log("Plato creado con éxito:", name);
+      return newDish;
+    }
+  }
+
+  createMenu(name, description) {
+    // Verificar si el menú ya existe
+    const existingMenu = this.#menus.find((menu) => menu.name === name);
+    if (existingMenu) {
+      // Devolvemos el menú existente para evitar duplicados
+      console.log(
+        `El menú ${name} ya existe. Retornando el plato existente...`
+      );
+      return existingMenu;
+    } else {
+      // Si no existe, crea un nuevo menú
+      const newMenu = new Menu(name, description);
+      this.#menus.push(newMenu);
+      // console.log(`Menú ${name} creado con éxito.`);
+      return newMenu;
+    }
+  }
+
+  createAllergen(name, description) {
+    // Verificar si el alergeno ya existe
+    const existingAllergen = this.#allergens.find(
+      (allergen) => allergen.name === name
+    );
+    if (existingAllergen) {
+      // Devolvemos el alergeno existente para evitar duplicados
+      console.log(
+        `El alérgeno ${name} ya existe. Retornando el plato existente...`
+      );
+      return existingAllergen;
+    } else {
+      // Si no existe, crea un nuevo alergeno
+      const newAllergen = new Allergen(name, description);
+      this.#allergens.push(newAllergen);
+      // console.log(`Alérgeno ${name} creado con éxito.`);
+      return newAllergen;
+    }
+  }
+
+  createRestaurant(name, description, location) {
+    // Verificar si el restaurante ya existe
+    const existingRestaurant = this.#restaurants.find(
+      (restaurant) => restaurant.name === name
+    );
+    if (existingRestaurant) {
+      // Devolvemos el restaurante existente para evitar duplicados
+
+      console.log(
+        `El restaurante ${name} ya existe.  Retornando el plato existente...`
+      );
+      return existingRestaurant;
+    } else {
+      const newRestaurant = new Restaurant(name, description, location);
+      this.#restaurants.push(newRestaurant);
+      // console.log(`Restaurante ${name} creado con éxito.`);
+      return newRestaurant;
+    }
   }
 }
 
@@ -799,18 +864,5 @@ Asignación plato a menus, vamos a hacer lo siguiente:
 Menu de la abuela va a tener -> plato5 (croquetas), plato6(tortilla) y plato8 (flan)
 Menu del día ->  plato7(paella) y plato8(Flan)
 
-  const dish9 = new Dish(
-    "Pisto",
-    "Un guiso tradicional de verduras",
-    ["tomate", "pimiento", "calabacín", "cebolla", "ajo", "sal"],
-    "pisto1.jpg"
-  );
 
- try {
-    manager.addDish(dish5, dish6);
-    console.log("Añadido con éxito:", dish5.toString());
-    console.log("Añadido con éxito:", dish6.toString());
-  } catch (error) {
-    console.error("Error al añadir Plato:", error);
-  }
 */
