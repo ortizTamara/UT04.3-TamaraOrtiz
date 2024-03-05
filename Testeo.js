@@ -1316,6 +1316,114 @@ function testeoAssignAndDesign() {
   } catch (error) {
     console.error(error);
   }
+
+  console.log("");
+  console.log("---------- TESTEO DESIGNACIÓN PLATO DE MENU  ----------");
+  console.log(manager.getMenu());
+
+  console.log("");
+  console.log(
+    "TEST 1: Intercambio el primer plato(dish8) por el segundo plato(dish6)"
+  );
+  // Al principio mostramos dish8 y después dish6, para comprobar el cambio comentar el intercambio.
+  // Intentar realizar el intercambio de posiciones entre dish6 y dish8 en menu2
+  try {
+    manager.changeDishesPositionsInMenu(menu2, dish6, dish8);
+    console.log(
+      "Interambio realizado con éxito entre",
+      dish6.name,
+      "y",
+      dish8.name,
+      "en",
+      menu2.name
+    );
+  } catch (error) {
+    console.error("Error al intentar intercambiar platos en 'menu2':", error);
+  }
+
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+  console.log("");
+  console.log("TEST 2: Menu es null");
+  try {
+    manager.changeDishesPositionsInMenu(null, dish6, dish8);
+  } catch (error) {
+    console.error(error);
+  }
+  console.log("");
+  console.log("TEST 2: plato es null");
+  try {
+    manager.changeDishesPositionsInMenu(menu2, null, dish8);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 3: Menú no esta registrado");
+  try {
+    const menu10 = new Menu("Menú Postre", "Menu de los mejores postres.");
+    manager.changeDishesPositionsInMenu(menu10, dish6, dish8);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 4: Plato no esta registrado");
+  try {
+    const dish20 = new Dish(
+      "Migas",
+      "Migas de la mancha.",
+      ["pan", "chorizo", "panceta", "pimientos"],
+      "migas1.jpg"
+    );
+    manager.changeDishesPositionsInMenu(menu2, dish20, dish8);
+  } catch (error) {
+    console.error(error);
+  }
+
+  // ME FALTA DISH NO ESTÁ ASIGNADO EN EL MENÚ
+
+  console.log("");
+  console.log("---------- TESTEO ITERADOR PLATOS A UNA CATEGORÍA  ----------");
+
+  console.log("");
+  try {
+    // console.log(manager.getCategories());
+    manager.assignCategoryToDish(category6, dish6);
+    console.log("Asignación exitosa:", category6.name, "tiene", dish6.name);
+  } catch (error) {
+    console.error("Error en la asignación:", error);
+  }
+
+  console.log("");
+  console.log("TEST 1: Iterador con la relación de los platos a categoría");
+  try {
+    for (const dish of manager.getDishesInCategory(category6)) {
+      console.log(dish.toString());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 2: Categoría no esta registrada");
+  try {
+    const category10 = new Category("Almuerzo", "Categoría para Almuerzo");
+    for (const dish of manager.getDishesInCategory(category10)) {
+      console.log(dish.toString());
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("");
+  console.log("TEST 3: Categoría es nula");
+  try {
+    for (const dish of manager.getDishesInCategory(null)) {
+      console.log(dish.toString());
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 testeoDish();

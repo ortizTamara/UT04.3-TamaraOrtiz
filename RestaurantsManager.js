@@ -631,6 +631,67 @@ class RestaurantsManager {
     }
     return this;
   }
+
+  changeDishesPositionsInMenu(menu, dishOne, dishTwo) {
+    // Comprobamos que Menu no sea nulo
+    if (!(menu instanceof Menu)) {
+      throw new MenuIsNull(menu);
+    }
+
+    // Buscamos el menu en la lista de menus registradas para obtener su posición.
+    let menuPosition = this.#getMenuPosition(menu);
+    // Si el menu no está registrada, lanza una excepción.
+    if (menuPosition === -1) {
+      throw new MenuNotRegistred(menu);
+    }
+
+    // Obtenemos el menu almacenada usando la posición encontrada.
+    const storedMenu = this.#menus[menuPosition];
+
+    // Verificamos si plato es nula para no seguir avanzando
+    if (!(dishOne instanceof Dish) || !(dishTwo instanceof Dish)) {
+      throw new DishIsNull("Uno de los platos proporcionados es inválido.");
+    }
+
+    let dishOneIndex = storedMenu.dishes.findIndex(
+      (dish) => dish.name === dishOne.name
+    );
+    let dishTwoIndex = storedMenu.dishes.findIndex(
+      (dish) => dish.name === dishTwo.name
+    );
+
+    if (dishOneIndex === -1 || dishTwoIndex === -1) {
+      throw new DishNotRegistred(dishOne, dishTwo);
+    }
+
+    // Intercambio de platos
+    [storedMenu.dishes[dishOneIndex], storedMenu.dishes[dishTwoIndex]] = [
+      storedMenu.dishes[dishTwoIndex],
+      storedMenu.dishes[dishOneIndex],
+    ];
+
+    return this;
+  }
+
+  getDishesInCategory(category) {
+    if (!category || !(category instanceof Category)) {
+      throw new CategoryIsNull(category);
+    }
+
+    const categoryPosition = this.#getCategoryPosition(category);
+    if (categoryPosition === -1) {
+      throw new CategoryNotRegistred(category);
+    }
+
+    const dishesInCategory = this.#categories[categoryPosition].dishes;
+    return {
+      *[Symbol.iterator]() {
+        for (let dish of dishesInCategory) {
+          yield dish;
+        }
+      },
+    };
+  }
 }
 
 export { RestaurantsManager };
