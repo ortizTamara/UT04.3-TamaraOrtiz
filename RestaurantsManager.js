@@ -38,7 +38,7 @@ import { Menu, Restaurant, Coordinate } from "./Restaurante.js";
 
 // const RestaurantsManager = function () {
 class RestaurantsManager {
-  // static #instance = null;
+  // let instantiated;
   #categories = [];
   #menus = [];
   #allergens = [];
@@ -76,10 +76,6 @@ class RestaurantsManager {
       : 1;
 
   constructor() {
-    // if (RestaurantsManager.#instance) {
-    //   throw new Error("Instancia de RestaurantsManager ya creada");
-    // }
-
     // GETTER CATEGORIES
     Object.defineProperty(this, "categories", {
       enumerable: true,
@@ -141,14 +137,6 @@ class RestaurantsManager {
       },
     });
   }
-
-  // Método estático para obtener la instancia
-  // static getInstance() {
-  //   if (RestaurantsManager.#instance === null) {
-  //     RestaurantsManager.#instance = new RestaurantsManager();
-  //   }
-  //   return RestaurantsManager.#instance;
-  // }
 
   // Añade una nueva categoría.
   addCategory(...categories) {
@@ -748,28 +736,15 @@ class RestaurantsManager {
     };
   }
 
-  // NO LO ENTIENDO
-  // Método para buscar platos con un callback y un orden dado
-  findDishes(dish, callback, order) {
-    // Obtenemos la posición del plato en el arreglo
-    let posDish = this.#getDishPosition(dish);
-
-    // Validamos la existencia del plato
-    if (typeof dish === null || posDish === -1)
-      throw new DishNotRegistred("dish", dish);
-
-    // Creamos una copia del arreglo de platos filtrados y ordenarla
-    let array = [...this.#dishes.filter(callback)];
+  *findDishes(callback, order) {
+    const array = [];
+    for (const storedDish of this.#dishes) {
+      if (callback(storedDish.dish)) array.push(storedDish.dish);
+    }
     array.sort(order);
-
-    // Devolvemos un iterable para los platos ordenados
-    return {
-      *[Symbol.iterator]() {
-        for (let i = 0; i < array.length; i++) {
-          yield array[i];
-        }
-      },
-    };
+    for (let i = 0; i < array.length; i++) {
+      yield array[i];
+    }
   }
 
   createDish(name, description, ingredients, image) {

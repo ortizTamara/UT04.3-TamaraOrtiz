@@ -1452,6 +1452,8 @@ function testeoAssignAndDesign() {
     console.error(error);
   }
 
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
+
   console.log("");
   console.log("TEST 4: Categoría es nula");
   try {
@@ -1526,6 +1528,7 @@ function testeoAssignAndDesign() {
     console.error(error);
   }
 
+  // AQUÍ HACEMOS AHORA PRUEBAS DE ERROR
   console.log("");
   console.log("TEST 3: Alergeno no esta registrada");
   try {
@@ -1550,6 +1553,22 @@ function testeoAssignAndDesign() {
   console.log("");
   console.log("---------- TESTEO ITERADOR CALLBACK  ----------");
   // FALTA POR TESTEAR FINDDISHES
+
+  const nombre = (dish) => dish.name === "Croquetas";
+  const nombre2 = (dish) => dish.name === "Albondigas";
+
+  console.log("");
+  console.log("TEST 1: Buscamos plato con callback");
+  for (let plato of manager.findDishes(nombre)) {
+    console.log("FindDishes:", plato);
+  }
+  // console.log(manager.getDish());
+
+  console.log("");
+  console.log("TEST 2: Buscamos plato con callback");
+  for (let plato of manager.findDishes(nombre2)) {
+    console.log("FindDishes:", plato);
+  }
 
   console.log("");
   console.log("---------- TESTEO CREACIÓN DE PLATOS ----------");
