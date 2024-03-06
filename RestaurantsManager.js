@@ -38,6 +38,7 @@ import { Menu, Restaurant, Coordinate } from "./Restaurante.js";
 
 // const RestaurantsManager = function () {
 class RestaurantsManager {
+  // static #instance = null;
   #categories = [];
   #menus = [];
   #allergens = [];
@@ -75,6 +76,10 @@ class RestaurantsManager {
       : 1;
 
   constructor() {
+    // if (RestaurantsManager.#instance) {
+    //   throw new Error("Instancia de RestaurantsManager ya creada");
+    // }
+
     // GETTER CATEGORIES
     Object.defineProperty(this, "categories", {
       enumerable: true,
@@ -136,6 +141,14 @@ class RestaurantsManager {
       },
     });
   }
+
+  // Método estático para obtener la instancia
+  // static getInstance() {
+  //   if (RestaurantsManager.#instance === null) {
+  //     RestaurantsManager.#instance = new RestaurantsManager();
+  //   }
+  //   return RestaurantsManager.#instance;
+  // }
 
   // Añade una nueva categoría.
   addCategory(...categories) {
@@ -837,6 +850,7 @@ class RestaurantsManager {
 }
 
 export { RestaurantsManager };
+// export default RestaurantsManager;
 
 /*
 
