@@ -825,30 +825,3 @@ class RestaurantsManager {
 }
 
 export { RestaurantsManager };
-// export default RestaurantsManager;
-
-/*
-
-Tenemos categoría:
-- Categoría5 Entrante -> Que tiene plato5 (Croquetas)
-- Categoría6 Comida -> Que tiene plato 6(tortilla) y 7 (Paella)
-- Categoría7 Postre -> Que tiene plato8(Flan) (Lo tengo en prueba error)
-- Categoría8 Cena -> Que tiene plato9 (Pisto) (lo tengo en prueba error)
-
-Categoría 5 añadida
-Plato5 y plato6 añadido
-category6 añadido al sistema
-plato 7 añadido al sistema
-Categoría7 Añadido al sistema
-
-Tenemos plato:
-plato10 pizza -> Que tiene alergeno1(gluten)
-plato11 pollo cacahuete -> Que tiene alergeno2(cacahuete)y alergeno3(pimiento)
-
-
-Asignación plato a menus, vamos a hacer lo siguiente:
-Menu de la abuela va a tener -> plato5 (croquetas), plato6(tortilla) y plato8 (flan)
-Menu del día ->  plato7(paella) y plato8(Flan)
-
-
-*/

@@ -1680,14 +1680,3 @@ testeoAllergen();
 testeoRestaurante();
 testeoRestaurantsManager();
 testeoAssignAndDesign();
-
-/*
-Asignar platos directamente a categorías y menús, y asignar alérgenos directamente a platos. 
-- Cada plato sabe exactamente en qué categoría o categorías se encuentra y que alérgenos tiene.  
-- Cada menú conoce los platos que contiene.
-
-
-
-
-
-*/
